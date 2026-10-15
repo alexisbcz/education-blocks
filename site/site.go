@@ -515,6 +515,10 @@ func Collections() []Collection {
 			Title:  "The reading components of a lesson page",
 			Lede:   "What an author writes a lesson with, as distinct from its exercises: numbered definitions and theorems with cross-references that preview in place and proofs that open step by step, margin notes and footnotes, callouts, an explorable paragraph whose numbers you drag, notation linked across formula, figure and code, a code-and-math cell, a line-by-line derivation, an outline with reading progress, checks inside the prose, numbered figures with long descriptions, and reading settings. Everything reads without JavaScript.",
 			Blocks: ProseBlocks},
+		{Slug: "spectro", Name: "Spectroscopy", Path: "/spectro",
+			Title:  "The blocks of an interactive spectroscopy course",
+			Lede:   "How chemists read what a molecule is from the light and ions it gives back, computed in the page: rings and π bonds from the formula, isotope clusters in a mass spectrum, fragment losses, NMR splitting trees, assigning a ¹H spectrum, functional groups from IR bands, UV-Vis calibration and stray light, chromatographic resolution and the van Deemter curve, detection limits and standard addition, and powder X-ray diffraction.",
+			Blocks: SpectroBlocks},
 	}
 }
 
