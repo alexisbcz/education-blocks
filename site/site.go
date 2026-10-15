@@ -411,6 +411,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive theory of computation course",
 			Lede:   "What machines can and cannot do, with every machine running in the page: design a DFA and get the shortest counterexample, minimise one pair by pair, play the pumping lemma, step a pushdown automaton and a Turing machine, run the busy beaver champions up to BB(5)'s 47 million steps, see the diagonal argument behind the halting problem, place languages in the Chomsky hierarchy, reduce 3-SAT to independent set and watch DPLL search.",
 			Blocks: TocBlocks},
+		{Slug: "vision", Name: "Computer Vision", Path: "/vision",
+			Title:  "The blocks of an interactive computer vision course",
+			Lede:   "How a program finds structure in pixels, every algorithm running live on images generated in the page: Canny edges stage by stage, the Hough transform, Harris corners, the pinhole camera with lens distortion, a homography from four points, stereo depth from random dots, Lucas–Kanade flow and the aperture problem, histogram equalisation and Otsu's threshold, two-pass connected components and RANSAC against least squares.",
+			Blocks: VisionBlocks},
 	}
 }
 
