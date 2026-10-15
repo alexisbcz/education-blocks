@@ -375,6 +375,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive hydrology course",
 			Lede:   "Water through a landscape, every model computed exactly on synthetic catchments and records: residence times from a steady-state box balance, Horton infiltration and ponding, SCS Curve Number runoff, unit hydrograph convolution, Manning's equation in a trapezoidal channel, Gumbel flood frequency and return-period risk, Darcy and Thiem around a pumping well, reservoir sizing by the sequent peak algorithm, the Streeter–Phelps oxygen sag and D8 drainage networks.",
 			Blocks: HydrologyBlocks},
+		{Slug: "behavioral", Name: "Behavioral Economics", Path: "/behavioral",
+			Title:  "The blocks of an interactive behavioral economics course",
+			Lede:   "How real people decide, set against the textbook: prospect theory's value and weighting curves, your own loss aversion from a price list, hyperbolic discounting and preference reversals, present bias in planning, defaults and inertia, the endowment effect in a mug market, ultimatum and dictator games, a public goods game with punishment, and the secretary problem. Each model is stated, each finding cited with its replication record.",
+			Blocks: BehavioralBlocks},
 	}
 }
 
