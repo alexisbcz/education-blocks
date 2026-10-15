@@ -103,6 +103,11 @@ func siteHeader(slug, name string, n int) h.Node {
 				return badge.Badge(badge.VariantOutline, h.Class("ml-1 hidden font-mono text-[11px] md:inline-flex"), fmt.Sprintf("%d blocks", n))
 			}),
 			h.Div(h.Class("flex-1")),
+			h.A(h.Href(repoURL), h.Target("_blank"), h.Rel("noopener"),
+				h.Class(button.Variants(button.VariantOutline, button.SizeIcon, "size-8")),
+				h.Aria("label", "Source on GitHub"), h.Title("Source on GitHub"),
+				hugeicons.GithubIcon(),
+			),
 			button.Button(button.VariantOutline, button.SizeIcon, h.Class("size-8"), h.Type("button"),
 				h.Data("theme-toggle", ""), h.Aria("label", "Toggle theme"),
 				hugeicons.Sun03Icon(h.Class("hidden dark:block")),
@@ -183,3 +188,6 @@ func siteFooter() h.Node {
 		h.P("Icons: Hugeicons (free set, MIT). Fonts: Geist and Geist Mono (OFL)."),
 	)
 }
+
+// repoURL is the gallery's source repository, linked from the header.
+const repoURL = "https://github.com/alexisbcz/education-blocks"
