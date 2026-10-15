@@ -251,6 +251,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive aerospace course",
 			Lede:   "How aircraft fly, from a benchtop wind tunnel whose balance weighs a wing's lift and drag: the four forces and the glide, the standard atmosphere and the lift equation, lift curves and drag polars, NACA sections drawn from their formulas, pitot-static airspeed, the V–n envelope, turning flight, Breguet range and rotors in hover.",
 			Blocks: AerospaceBlocks},
+		{Slug: "civil", Name: "Civil & Structural Engineering", Path: "/civil",
+			Title:  "The blocks of an interactive civil engineering course",
+			Lede:   "How structures carry load, starting from a model truss bridge on a test bench with its bars tinted by force: the method of joints as a linear system, shear and moment diagrams with the elastic curve, cross-sections and bending stress, Euler buckling, catenary arches, a reinforced concrete beam, load paths with Eurocode factors, footbridge resonance and a gravity dam.",
+			Blocks: CivilBlocks},
 	}
 }
 
