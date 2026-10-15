@@ -479,6 +479,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive forensic science course",
 			Lede:   "What forensic measurements can and cannot say, on synthetic cases: STR profiles and the product rule, the prosecutor's fallacy and database trawls, impact angles and the area of origin of bloodstains, time since death from body cooling, blood alcohol back-calculation, fingerprint minutiae and their error rates, glass refractive index, blowfly degree hours, and stature from a footprint with an honest prediction interval.",
 			Blocks: ForensicsBlocks},
+		{Slug: "teach", Name: "Teaching Tools", Path: "/teach",
+			Title:  "The instructor tools of the platform",
+			Lede:   "The other side of the lessons, for the people who write and run them: a prerequisite graph with its unlock order and a learner's frontier, item analysis of a quiz, learning objectives checked against Bloom's verbs and aligned with activities and assessments, a rubric builder, a lesson storyboard with time estimates, cohort analytics, the decision panel for a lesson experiment, a feedback comment bank with a tone check, misconception rules tested against wrong answers, and a grade book with its policies spelled out.",
+			Blocks: TeachBlocks},
 	}
 }
 
