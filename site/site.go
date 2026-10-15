@@ -331,6 +331,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive audio engineering course",
 			Lede:   "Sound for the studio, computed and heard in the page: decibels that add as powers, A- and C-weighting, a parametric EQ read back from its own filters, a compressor written sample by sample, Sabine's reverberation time with a convolution reverb, pan laws and mid/side width, microphone polar patterns, comb filtering between two mics, BS.1770 loudness with true peak, and tempo and file-size calculators.",
 			Blocks: AudioBlocks},
+		{Slug: "film", Name: "Animation & Film", Path: "/film",
+			Title:  "The blocks of an interactive animation and film course",
+			Lede:   "How moving pictures are made: frame rates and shutter angle, the animation principles of squash and stretch, timing and follow-through, springs and keyframe interpolation, aspect ratios and safe areas, shot sizes, the 180-degree rule, and colour grading with a waveform scope.",
+			Blocks: FilmBlocks},
 	}
 }
 
