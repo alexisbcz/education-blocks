@@ -435,6 +435,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive astrophysics and cosmology course",
 			Lede:   "The physics behind the sky, computed live from SI constants: blackbody spectra and star colours, measuring a galaxy's redshift by hand, how long stars live and what they leave behind, clocks near a black hole, dark matter in rotation curves, gravitational lensing traced ray by ray, the Friedmann equation and the age of the universe, the three cosmological distances, the CMB and its acoustic peaks, and the chirp of merging black holes.",
 			Blocks: AstroBlocks},
+		{Slug: "nutrition", Name: "Nutrition Science", Path: "/nutrition",
+			Title:  "The blocks of an interactive nutrition science course",
+			Lede:   "The numbers behind what we eat, each with its evidence and limits stated: energy expenditure equations, why weight change plateaus, Atwater factors on a label, glycemic index against load, protein scores and complementing, EAR, RDA and UL, nutrient density per 100 kcal, what BMI misses, sodium and potassium, and healthy-user bias in a simulated cohort. Educational models, not dietary advice.",
+			Blocks: NutritionBlocks},
 	}
 }
 
