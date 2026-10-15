@@ -295,6 +295,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive learning science course",
 			Lede:   "How to learn, with the evidence attached: a forgetting curve you flatten with spaced reviews, a spacing planner after Cepeda et al., free-recall practice, interleaved problem sets, why-and-how prompts, a confidence calibration quiz with its Brier score, a focus timer, a Feynman-style explanation workspace, a concept map, and what the research does and doesn't support.",
 			Blocks: LearningBlocks},
+		{Slug: "sports", Name: "Sports Science", Path: "/sports",
+			Title:  "The blocks of an interactive sports science course",
+			Lede:   "The physics and physiology of sport, computed: a spinning ball's Magnus curve beside the same shot without spin, the best release angle for a shot put and a long jump, a two-number sprint model with its splits, the speed a cyclist's watts buy, the ACSM oxygen cost of running, Karvonen heart-rate zones, the three energy systems, the biceps as a lever, and jumps, bounces and Elo ratings. Educational, not training or medical advice.",
+			Blocks: SportsBlocks},
 	}
 }
 
