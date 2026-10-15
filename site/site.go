@@ -271,6 +271,14 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive pharmacology course",
 			Lede:   "What the body does to a drug and what the drug does to the body, with a generic drug and illustrative numbers: one- and two-compartment kinetics, oral absorption, repeated dosing to steady state, infusions and loading doses, the therapeutic index, receptor occupancy, interactions through clearance, saturable elimination and variability across a population. Educational only, not medical advice: never use these models for dosing.",
 			Blocks: PharmacologyBlocks},
+		{Slug: "complex", Name: "Complex Analysis", Path: "/complex",
+			Title:  "The blocks of an interactive complex analysis course",
+			Lede:   "Numbers with a direction: complex arithmetic as rotate-and-scale, Euler's formula on the unit circle, roots of unity and Durand–Kerner, domain colouring of zeros and poles, conformal maps from z² to the Joukowski airfoil, contour integrals checked against the residue theorem, and the Riemann sphere.",
+			Blocks: ComplexBlocks},
+		{Slug: "algebra", Name: "Abstract Algebra", Path: "/algebra",
+			Title:  "The blocks of an interactive abstract algebra course",
+			Lede:   "Structure from a single operation: Cayley tables of cyclic, dihedral, symmetric and quaternion groups, symmetries of a polygon, permutations in cycle notation, cosets and quotient groups, Burnside's lemma counting necklaces, rings and finite fields, the parity invariant of the 15 puzzle, and polynomials over ℤₚ.",
+			Blocks: AlgebraBlocks},
 	}
 }
 
