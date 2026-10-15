@@ -507,6 +507,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive evolution and phylogenetics course",
 			Lede:   "How trees of life are inferred and what population genetics says about the lineages on them, on sequences and genealogies simulated live: UPGMA against neighbour joining, maximum parsimony over every tree for five taxa, long-branch attraction, the Jukes–Cantor correction, dating an outbreak with a molecular clock, the coalescent, Kimura's fixation probability, reading clades, bootstrap support and phylogenetic independent contrasts.",
 			Blocks: PhyloBlocks},
+		{Slug: "prose", Name: "Lesson Components", Path: "/prose",
+			Title:  "The reading components of a lesson page",
+			Lede:   "What an author writes a lesson with, as distinct from its exercises: numbered definitions and theorems with cross-references that preview in place and proofs that open step by step, margin notes and footnotes, callouts, an explorable paragraph whose numbers you drag, notation linked across formula, figure and code, a code-and-math cell, a line-by-line derivation, an outline with reading progress, checks inside the prose, numbered figures with long descriptions, and reading settings. Everything reads without JavaScript.",
+			Blocks: ProseBlocks},
 	}
 }
 
