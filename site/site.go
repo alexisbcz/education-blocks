@@ -471,6 +471,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive information retrieval course",
 			Lede:   "How a search engine finds and ranks, run live on forty short science notes: an inverted index with stemming, Boolean merges with skip pointers and phrase queries, tf-idf with cosine similarity, BM25's saturation and length normalisation, precision, average precision and nDCG, PageRank against a random surfer, spelling correction by edit distance, autocomplete with a trie, Bloom filters, and nearest-neighbour search with random hyperplanes.",
 			Blocks: SearchBlocks},
+		{Slug: "forensics", Name: "Forensic Science", Path: "/forensics",
+			Title:  "The blocks of an interactive forensic science course",
+			Lede:   "What forensic measurements can and cannot say, on synthetic cases: STR profiles and the product rule, the prosecutor's fallacy and database trawls, impact angles and the area of origin of bloodstains, time since death from body cooling, blood alcohol back-calculation, fingerprint minutiae and their error rates, glass refractive index, blowfly degree hours, and stature from a footprint with an honest prediction interval.",
+			Blocks: ForensicsBlocks},
 	}
 }
 
