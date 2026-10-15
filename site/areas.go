@@ -21,7 +21,7 @@ var areas = []struct {
 }{
 	{"Mathematics", []string{"linalg", "calculus", "geometry", "probability", "stats", "discrete", "crypto", "logic", "complex", "algebra", "chaos", "optimization", "methods", "numtheory", "topology", "gametheory", "bayes", "numerics", "combinatorics", "netsci", "odes"}},
 	{"Computing", []string{"ml", "algorithms", "arch", "graphics", "networking", "plt", "os", "databases", "infotheory", "qcomputing", "security", "dataviz", "a11y", "games", "llm", "distsys", "toc", "vision", "ledger", "gis", "hci", "parallel", "search", "progfund"}},
-	{"Physical sciences", []string{"physics", "quantum", "thermo", "em", "optics", "nuclear", "fluids", "chemistry", "astronomy", "astro", "compchem"}},
+	{"Physical sciences", []string{"physics", "quantum", "thermo", "em", "optics", "nuclear", "fluids", "chemistry", "astronomy", "astro", "compchem", "spectro"}},
 	{"Engineering", []string{"automotive", "rocketry", "materials", "signals", "control", "energy", "aerospace", "civil", "electronics", "audio", "mechanical", "robotics", "semi", "marine", "building", "space"}},
 	{"Earth & life sciences", []string{"geology", "climate", "biology", "genetics", "physiology", "pharmacology", "neuro", "epidemiology", "ecology", "paleo", "food", "sports", "agriculture", "imaging", "hydrology", "ocean", "immuno", "weather", "biochem", "nutrition", "forensics", "phylo"}},
 	{"Platform", []string{"platform", "assess", "teach", "prose"}},

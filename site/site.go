@@ -495,6 +495,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive naval architecture course",
 			Lede:   "Why ships float upright and how fast they go, starting from an inclining experiment on a model pontoon: draft and displacement, the righting lever and GZ curve computed exactly for a box, the free-surface effect of slack tanks, working up a real inclining test, hull speed and the Froude number, friction and residuary resistance with effective power, the propeller's open-water diagram, apparent wind and sail forces, and a polar diagram with VMG and laylines.",
 			Blocks: MarineBlocks},
+		{Slug: "building", Name: "Building Physics", Path: "/building",
+			Title:  "The blocks of an interactive building physics course",
+			Lede:   "How buildings hold heat, move moisture, let in light and keep out noise: U-values, condensation, heat loss, thermal mass, sun and shade, daylight, ventilation, comfort and sound insulation, each worked with the standard design method.",
+			Blocks: BuildingBlocks},
 	}
 }
 
