@@ -37,14 +37,16 @@ func main() {
 		log.Fatal(err)
 	}
 	defer os.RemoveAll(tmp)
-	html, err := site.RenderGallery()
+	pages, err := site.RenderPages()
 	if err != nil {
 		log.Fatal(err)
 	}
-	rendered := filepath.Join(tmp, "gallery.html")
-	if err := os.WriteFile(rendered, []byte(html), 0o644); err != nil {
-		log.Fatal(err)
+	for name, html := range pages {
+		if err := os.WriteFile(filepath.Join(tmp, name+".html"), []byte(html), 0o644); err != nil {
+			log.Fatal(err)
+		}
 	}
+	rendered := filepath.Join(tmp, "*.html")
 
 	theme, err := os.ReadFile(filepath.Join(root, "site", "styles", "app.css"))
 	if err != nil {

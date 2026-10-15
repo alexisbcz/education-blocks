@@ -5,6 +5,7 @@ package site
 
 import (
 	"embed"
+	"fmt"
 	"io/fs"
 	"net/http"
 
@@ -46,6 +47,126 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive neuroscience course",
 			Lede:   "Science taught with live models, not pictures of them: the action potential is the Hodgkin–Huxley equations integrated in your browser, membrane potentials come from Nernst and Goldman, spike trains from a Poisson process.",
 			Blocks: NeuroBlocks},
+		{Slug: "ml", Name: "Machine Learning", Path: "/ml",
+			Title:  "The blocks of an interactive machine learning course",
+			Lede:   "Models that train while you watch: a neural network fitting its decision boundary, gradient descent crawling down a loss surface, polynomials overfitting a sine wave. Every curve is computed in the browser or in Go, from the same equations a textbook would print.",
+			Blocks: MLBlocks},
+		{Slug: "history", Name: "History", Path: "/history",
+			Title:  "The blocks of an interactive history course",
+			Lede:   "History of science and mathematics told with its own evidence: dated events on a zoomable timeline, overlapping lives, a primary source with glosses, and the route a single book took from Alexandria to the printing press.",
+			Blocks: HistoryBlocks},
+		{Slug: "physics", Name: "Classical Physics", Path: "/physics",
+			Title:  "The blocks of an interactive classical physics course",
+			Lede:   "Mechanics, waves and optics as running simulations: trajectories integrated with RK4, orbits with a symplectic integrator that keeps energy constant, collisions that conserve momentum to the last digit. Every number on screen comes from the equations of motion.",
+			Blocks: PhysicsBlocks},
+		{Slug: "quantum", Name: "Quantum Physics", Path: "/quantum",
+			Title:  "The blocks of an interactive quantum physics course",
+			Lede:   "Quantum mechanics computed, not cartooned: wave packets evolved with the Schrödinger equation, eigenstates from their exact formulas, measurements sampled with the Born rule, spectra from Rydberg and Planck. Units and approximations are stated on every block.",
+			Blocks: QuantumBlocks},
+		{Slug: "thermo", Name: "Thermodynamics", Path: "/thermo",
+			Title:  "The blocks of an interactive thermodynamics course",
+			Lede:   "Heat, work and entropy with the bookkeeping shown: cycles whose first-law table closes to zero, a rod solving the heat equation, multiplicities counted exactly, water's phase boundaries from the IAPWS correlations, and a Stirling engine you can watch turn.",
+			Blocks: ThermoBlocks},
+		{Slug: "sociology", Name: "Sociology", Path: "/sociology",
+			Title:  "The blocks of an interactive sociology course",
+			Lede:   "Society as systems you can run: Schelling's segregation model, small-world networks, centrality, inequality curves, diffusion, cooperation tournaments and sampling bias. Simulations use synthetic populations; real sources are cited by author and year.",
+			Blocks: SociologyBlocks},
+		{Slug: "geology", Name: "Geology", Path: "/geology",
+			Title:  "The blocks of an interactive geology course",
+			Lede:   "The Earth read from its own records: a seismograph writing P and S waves, the ICS time scale to the nearest hundred thousand years, ages from radioactive decay, epicentres from three circles, and cross-sections to read like a field geologist.",
+			Blocks: GeologyBlocks},
+		{Slug: "chemistry", Name: "Chemistry", Path: "/chemistry",
+			Title:  "The blocks of an interactive chemistry course",
+			Lede:   "Chemistry with the arithmetic done properly: a periodic table rendered from IUPAC data, equations balanced exactly in rational arithmetic, pH solved from the charge balance, equilibria solved for the extent of reaction, and molecules you can turn in 3D.",
+			Blocks: ChemistryBlocks},
+		{Slug: "stats", Name: "Statistics", Path: "/stats",
+			Title:  "The blocks of an interactive statistics course",
+			Lede:   "Uncertainty made visible: distributions with exact CDFs, sample means piling into a bell curve, a hundred confidence intervals at once, power from the noncentral t, and Bayes counted in people. Every number is computed live from seeded samples or published data.",
+			Blocks: StatsBlocks},
+		{Slug: "calculus", Name: "Calculus", Path: "/calculus",
+			Title:  "The blocks of an interactive calculus course",
+			Lede:   "Limits, derivatives and integrals as things you can push on: an ε–δ band that finds its own δ, secants collapsing into tangents, quadrature rules with their error orders on a log–log plot, Taylor polynomials that fail outside their radius, and Newton's method doubling its digits.",
+			Blocks: CalculusBlocks},
+		{Slug: "probability", Name: "Probability", Path: "/probability",
+			Title:  "The blocks of an interactive probability course",
+			Lede:   "Chance, computed exactly and then checked by simulation: events as areas, the birthday problem, Monty Hall, gambler's ruin, the law of large numbers, a Galton board, a Markov chain and the exact distribution of dice sums.",
+			Blocks: ProbabilityBlocks},
+		{Slug: "crypto", Name: "Number Theory & Cryptography", Path: "/crypto",
+			Title:  "The blocks of an interactive number theory and cryptography course",
+			Lede:   "Primes, remainders and the secrets built on them: a sieve you can run, Euclid's algorithm with Bézout's coefficients, square-and-multiply in BigInt, RSA and Diffie–Hellman end to end with toy numbers, frequency analysis against Caesar, and SHA-256 from your browser's Web Crypto.",
+			Blocks: CryptoBlocks},
+		{Slug: "logic", Name: "Logic", Path: "/logic",
+			Title:  "The blocks of an interactive logic course",
+			Lede:   "Reasoning made checkable: truth tables from any formula you type, a full adder built from gates, valid forms against fallacies with their counterexamples, syllogisms on Venn diagrams, quantifiers over a small world, and a proof by induction step by step.",
+			Blocks: LogicBlocks},
+		{Slug: "biology", Name: "Biology", Path: "/biology",
+			Title:  "The blocks of an interactive biology course",
+			Lede:   "Life from the cell up: organelles you can point at, DNA translated with the standard genetic code, Mendel's ratios counted in Punnett squares, allele frequencies drifting and selected, predators chasing prey, and enzymes slowed by inhibitors. Every curve is computed from its equation.",
+			Blocks: BiologyBlocks},
+		{Slug: "epidemiology", Name: "Epidemiology", Path: "/epidemiology",
+			Title:  "The blocks of an interactive epidemiology course",
+			Lede:   "How diseases spread and how we measure them: SIR and SEIR models with herd immunity, an outbreak simulated person by person, flattening the curve against hospital capacity, risk and odds ratios with confidence intervals, screening biases, and John Snow's pump.",
+			Blocks: EpidemiologyBlocks},
+		{Slug: "paleo", Name: "Paleoanthropology", Path: "/paleo",
+			Title:  "The blocks of an interactive paleoanthropology course",
+			Lede:   "Seven million years of human evolution with the uncertainty left in: species as dated ranges with fuzzy ends, brains measured in cubic centimetres, dispersals step by step, the methods that date the fossils, and the Neanderthal DNA we still carry. Debated points are marked as debated.",
+			Blocks: PaleoBlocks},
+		{Slug: "geometry", Name: "Geometry", Path: "/geometry",
+			Title:  "The blocks of an interactive geometry course",
+			Lede:   "Figures you can push on while the theorems hold: triangle centres on the Euler line, Pythagoras proved by rearrangement, the unit circle with exact values, circle theorems, Archimedes squeezing π, conics from a focus and a line, wallpaper groups, curved triangles and the Platonic solids.",
+			Blocks: GeometryBlocks},
+		{Slug: "physiology", Name: "Anatomy & Physiology", Path: "/physiology",
+			Title:  "The blocks of an interactive anatomy and physiology course",
+			Lede:   "The body as a set of working systems: a heartbeat from a pressure–volume model, an ECG you can measure, flow that scales with the fourth power of a vessel's radius, lung volumes, hemoglobin's oxygen curve, the nephron, sliding filaments, a glucose feedback loop and the knee-jerk reflex. Typical textbook values, labelled as such; not medical advice.",
+			Blocks: PhysiologyBlocks},
+		{Slug: "economics", Name: "Economics", Path: "/economics",
+			Title:  "The blocks of an interactive economics course",
+			Lede:   "Economic models you can push on: supply and demand with surplus and deadweight loss as areas, elasticity, monopoly pricing, Nash equilibria solved exactly, compounding and inflation, Ricardo's comparative advantage, the Solow growth model and the spending multiplier. Models, clearly labelled, not forecasts.",
+			Blocks: EconomicsBlocks},
+		{Slug: "geography", Name: "Geography & Demography", Path: "/geography",
+			Title:  "The blocks of an interactive geography and demography course",
+			Lede:   "The Earth measured and mapped: projections with their distortion made visible, great-circle routes, longitude and solar time, contour maps and profiles, coordinates, population growth, ageing and the gravity model of spatial interaction.",
+			Blocks: GeographyBlocks},
+		{Slug: "discrete", Name: "Discrete Mathematics", Path: "/discrete",
+			Title:  "The blocks of an interactive discrete mathematics course",
+			Lede:   "Graphs, counting and recursion worked out exactly: a graph editor that answers Euler's Königsberg question, colourings checked by backtracking, binomial coefficients as big integers, Hanoi's 2ⁿ − 1 moves played in order, and spanning trees built edge by edge.",
+			Blocks: DiscreteBlocks},
+		{Slug: "algorithms", Name: "Algorithms & Data Structures", Path: "/algorithms",
+			Title:  "The blocks of an interactive algorithms course",
+			Lede:   "Algorithms you can watch and count: five sorts with every comparison tallied, BFS, Dijkstra and A* spreading across a grid you draw, hash tables filling up, trees keeping their invariants, and a dynamic-programming table filled cell by cell.",
+			Blocks: AlgorithmsBlocks},
+		{Slug: "linguistics", Name: "Linguistics", Path: "/linguistics",
+			Title:  "The blocks of an interactive linguistics course",
+			Lede:   "Language taken apart: the IPA chart, vowel formants you can hear in a rough synthesis, syntax trees drawn from bracket notation, words cut into morphemes, Zipf's law on any text, and the regular sound changes that tie English father to Latin pater.",
+			Blocks: LinguisticsBlocks},
+		{Slug: "music", Name: "Music Theory & Acoustics", Path: "/music",
+			Title:  "The blocks of an interactive music theory course",
+			Lede:   "Music as sound and as system: a keyboard that shows every frequency, just against equal intervals, timbre built from harmonics, the circle of fifths, correctly spelled modes, chords named as you play them, strings and beats, and a sequencer timed on the audio clock.",
+			Blocks: MusicBlocks},
+		{Slug: "psychology", Name: "Psychology & Cognitive Science", Path: "/psychology",
+			Title:  "The blocks of an interactive psychology course",
+			Lede:   "Experiments run on you, in this page: your reaction times against Hick's law, your Stroop interference, your Müller-Lyer bias and your serial position curve, next to signal detection, the Rescorla–Wagner model of learning, and the classic biases with an honest record of which ones replicated.",
+			Blocks: PsychologyBlocks},
+		{Slug: "philosophy", Name: "Philosophy", Path: "/philosophy",
+			Title:  "The blocks of an interactive philosophy course",
+			Lede:   "Arguments taken seriously: validity kept apart from soundness, thought experiments you answer before reading the positions, four ethical theories on the same dilemma, who read whom from Socrates to Rawls, informal fallacies, Zeno's paradox summed, and Descartes' cogito read closely.",
+			Blocks: PhilosophyBlocks},
+		{Slug: "astronomy", Name: "Astronomy & Astrophysics", Path: "/astronomy",
+			Title:  "The blocks of an interactive astronomy course",
+			Lede:   "The sky worked out from geometry and light: real planetary distances, Moon phases from the Sun–Earth–Moon angle, day length from the Sun's declination, a sky dome for any latitude, the Hertzsprung–Russell diagram, parallax, transit light curves and Hubble's law.",
+			Blocks: AstronomyBlocks},
+		{Slug: "climate", Name: "Climate & Meteorology", Path: "/climate",
+			Title:  "The blocks of an interactive climate and meteorology course",
+			Lede:   "The climate system with its bookkeeping shown: Earth's energy balance and the greenhouse effect, CO₂ forcing against the IPCC sensitivity range, the carbon budget, the standard atmosphere, humidity and dew point, global circulation, and a weather station's meteogram. Sources and approximations are named on every block.",
+			Blocks: ClimateBlocks},
+		{Slug: "em", Name: "Electromagnetism & Circuits", Path: "/em",
+			Title:  "The blocks of an interactive electromagnetism course",
+			Lede:   "Fields, circuits and light computed from the SI laws: field lines and equipotentials of charges you drag, Coulomb's inverse square, a circuit solved by Kirchhoff's laws, RC charging and RLC resonance, the magnetic field of a wire, Faraday induction and the electromagnetic spectrum.",
+			Blocks: EMBlocks},
+		{Slug: "arch", Name: "Computer Architecture", Path: "/arch",
+			Title:  "The blocks of an interactive computer architecture course",
+			Lede:   "From bits to a working processor: two's complement and flags, a ripple-carry adder with gate delays, a tiny CPU stepping through fetch, decode and execute, IEEE 754 floats down to the exact bit, the memory hierarchy, a cache simulator, pipeline hazards and Amdahl's law.",
+			Blocks: ArchBlocks},
 	}
 }
 
@@ -78,6 +199,9 @@ func Handler() http.Handler {
 	mux := http.NewServeMux()
 	mux.Handle("GET /static/", http.StripPrefix("/static/", http.FileServerFS(assets)))
 	mux.Handle(runtime.Prefix, runtime.Handler())
+	mux.HandleFunc("GET /subjects", func(w http.ResponseWriter, r *http.Request) {
+		_ = h.WriteHTTP(w, http.StatusOK, catalog(r))
+	})
 	for _, c := range Collections() {
 		mux.HandleFunc("GET "+c.Path+h.Ternary(c.Path == "/", "{$}", ""), func(w http.ResponseWriter, r *http.Request) {
 			_ = h.WriteHTTP(w, http.StatusOK, gallery(r, c))
@@ -86,17 +210,24 @@ func Handler() http.Handler {
 	return secure.Headers(secure.Config{})(mux)
 }
 
-// RenderGallery renders every collection outside a request, for the
-// stylesheet generator.
-func RenderGallery() (string, error) {
-	out := ""
+// RenderPages renders every collection and the catalog outside a
+// request, keyed by name, for the stylesheet generator. Pages are kept
+// apart: one huge file loses classes in Tailwind's scanner.
+func RenderPages() (map[string]string, error) {
+	pages := map[string]string{}
+	r0, _ := http.NewRequest("GET", "/subjects", nil)
+	s, err := h.RenderString(catalog(r0))
+	if err != nil {
+		return nil, err
+	}
+	pages["subjects"] = s
 	for _, c := range Collections() {
 		r, _ := http.NewRequest("GET", c.Path, nil)
 		s, err := h.RenderString(gallery(r, c))
 		if err != nil {
-			return "", err
+			return nil, fmt.Errorf("%s: %w", c.Slug, err)
 		}
-		out += s
+		pages[c.Slug] = s
 	}
-	return out, nil
+	return pages, nil
 }

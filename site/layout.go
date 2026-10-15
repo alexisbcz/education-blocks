@@ -1,8 +1,12 @@
 package site
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/fs"
 	"net/http"
+	"strings"
+	"sync"
 
 	"github.com/alexisbcz/components/ui/badge"
 	"github.com/alexisbcz/components/ui/button"
@@ -21,53 +25,71 @@ const themeScript = `(() => {
   if (saved === "dark" || (!saved && matchMedia("(prefers-color-scheme: dark)").matches)) root.classList.add("dark");
 })();`
 
-func gallery(r *http.Request, c Collection) h.Node {
-	blocks := c.Blocks()
+// moduleLoader imports every module of static/js, each in isolation: a
+// module that fails to load or throws only loses its own blocks, never the
+// rest of the page. Helper modules (plot.js, svg.js, ...) only export, so
+// importing them is harmless. The list is read from the embedded files, so
+// a new subject's module is picked up without touching a shared file.
+var moduleLoader = sync.OnceValue(func() string {
+	entries, _ := fs.ReadDir(static, "static/js")
+	var paths []string
+	for _, e := range entries {
+		if !e.IsDir() && strings.HasSuffix(e.Name(), ".js") && e.Name() != "app.js" {
+			paths = append(paths, "/static/js/"+e.Name())
+		}
+	}
+	list, _ := json.Marshal(paths)
+	return "for (const m of " + string(list) + ") import(m).catch((e) => console.error(`module ${m} failed:`, e));"
+})
+
+// pageShell is the document every page shares: fonts, styles, the theme
+// script, the components' runtime and the block modules.
+func pageShell(r *http.Request, title, description string, body ...any) h.Node {
 	return h.Doctype(h.Html(h.Lang("en"),
 		h.Head(
 			h.Meta(h.Charset("utf-8")),
 			h.Meta(h.Name("viewport"), h.Content("width=device-width, initial-scale=1")),
-			h.Title("Blocks · "+c.Name),
-			h.Meta(h.Name("description"), h.Content("The building blocks of an interactive linear algebra course: matrices, code, transformations, proofs and exercises.")),
+			h.Title(title+" · Hypercode"),
+			h.Meta(h.Name("description"), h.Content(description)),
 			h.Link(h.Rel("preload"), h.Href("/static/fonts/Geist-Variable.woff2"), h.Attr("as", "font"), h.Type("font/woff2"), h.Attr("crossorigin", "")),
 			h.Link(h.Rel("preload"), h.Href("/static/fonts/GeistMono-Variable.woff2"), h.Attr("as", "font"), h.Type("font/woff2"), h.Attr("crossorigin", "")),
 			h.Link(h.Rel("stylesheet"), h.Href("/static/app.css")),
 			h.Link(h.Rel("stylesheet"), h.Href("/static/anatomy/iso.css")),
 			secure.Script(r, h.UnsafeJS(themeScript)),
 			runtime.Scripts(r),
-			secure.Script(r, h.Type("module"), h.Src("/static/js/app.js")),
+			secure.Script(r, h.Type("module"), h.UnsafeJS(moduleLoader())),
 		),
-		h.Body(h.Class("min-h-svh bg-background font-sans text-foreground antialiased"),
-			siteHeader(c, len(blocks)),
-			h.Div(h.Class("mx-auto flex w-full max-w-[1400px] gap-10 px-4 sm:px-6 lg:px-8"),
-				sideNav(blocks),
-				h.Main(h.Class("flex min-w-0 flex-1 flex-col gap-20 py-10 lg:py-14"),
-					intro(c),
-					h.MapIdx(blocks, func(i int, b Block) h.Node { return blockSection(i, b) }),
-					siteFooter(),
-				),
-			),
-		),
+		h.Body(append([]any{h.Class("min-h-svh bg-background font-sans text-foreground antialiased")}, body...)...),
 	))
 }
 
-func siteHeader(c Collection, n int) h.Node {
+func gallery(r *http.Request, c Collection) h.Node {
+	blocks := c.Blocks()
+	return pageShell(r, c.Name, c.Lede,
+		siteHeader(c.Slug, c.Name, len(blocks)),
+		h.Div(h.Class("mx-auto flex w-full max-w-[1400px] gap-10 px-4 sm:px-6 lg:px-8"),
+			sideNav(blocks),
+			h.Main(h.Class("flex min-w-0 flex-1 flex-col gap-20 py-10 lg:py-14"),
+				intro(c),
+				h.MapIdx(blocks, func(i int, b Block) h.Node { return blockSection(i, b) }),
+				siteFooter(),
+			),
+		),
+	)
+}
+
+func siteHeader(slug, name string, n int) h.Node {
 	return h.Header(h.Class("sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/70"),
-		h.Div(h.Class("mx-auto flex h-14 w-full max-w-[1400px] items-center gap-3 px-4 sm:px-6 lg:px-8"),
+		h.Div(h.Class("mx-auto flex h-14 w-full max-w-[1400px] min-w-0 items-center gap-2 px-4 sm:gap-3 sm:px-6 lg:px-8"),
 			h.A(h.Href("/"), h.Class("flex items-center gap-2.5 font-medium tracking-tight"),
 				logoMark(),
-				h.Span("Hypercode"),
+				h.Span(h.Class("hidden sm:inline"), "Hypercode"),
 			),
-			h.Span(h.Class("text-border select-none"), "/"),
-			// Subject switcher: a segmented control of links.
-			h.Nav(h.Aria("label", "Subjects"), h.Class("flex items-center gap-1 rounded-lg border p-0.5"),
-				h.Map(Collections(), func(o Collection) h.Node {
-					return h.A(h.Href(o.Path), h.If(o.Slug == c.Slug, h.Aria("current", "page")),
-						h.Class("rounded-md px-2.5 py-1 text-xs text-muted-foreground transition-colors duration-150 hover:text-foreground aria-[current=page]:bg-accent aria-[current=page]:text-foreground"),
-						o.Name)
-				}),
-			),
-			badge.Badge(badge.VariantOutline, h.Class("ml-1 hidden font-mono text-[11px] md:inline-flex"), fmt.Sprintf("%d blocks", n)),
+			h.Span(h.Class("hidden text-border select-none sm:inline"), "/"),
+			subjectsMenu(slug, name),
+			h.Iff(n > 0, func() h.Node {
+				return badge.Badge(badge.VariantOutline, h.Class("ml-1 hidden font-mono text-[11px] md:inline-flex"), fmt.Sprintf("%d blocks", n))
+			}),
 			h.Div(h.Class("flex-1")),
 			button.Button(button.VariantOutline, button.SizeIcon, h.Class("size-8"), h.Type("button"),
 				h.Data("theme-toggle", ""), h.Aria("label", "Toggle theme"),

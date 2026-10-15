@@ -54,3 +54,10 @@ document.addEventListener("click", (e) => {
     v.hidden = v.dataset.view !== seg.dataset.seg;
   }
 });
+
+// Keep the current subject visible in the scrolling switcher.
+const current = document.querySelector('nav[aria-label="Subjects"] [aria-current="page"]');
+if (current) {
+  const nav = current.parentElement;
+  nav.scrollLeft = current.offsetLeft - (nav.clientWidth - current.offsetWidth) / 2;
+}
