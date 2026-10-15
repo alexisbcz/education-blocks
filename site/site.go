@@ -307,6 +307,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive sports science course",
 			Lede:   "The physics and physiology of sport, computed: a spinning ball's Magnus curve beside the same shot without spin, the best release angle for a shot put and a long jump, a two-number sprint model with its splits, the speed a cyclist's watts buy, the ACSM oxygen cost of running, Karvonen heart-rate zones, the three energy systems, the biceps as a lever, and jumps, bounces and Elo ratings. Educational, not training or medical advice.",
 			Blocks: SportsBlocks},
+		{Slug: "security", Name: "Computer Security", Path: "/security",
+			Title:  "The blocks of an interactive computer security course",
+			Lede:   "Defensive security, attacked only in sandboxes: password entropy against pattern-aware guessing, hashing with salt and live PBKDF2 timing, XSS analysed in an inert document beside this page's own CSP, SQL injection on a toy parser next to parameterised queries, CSRF layer by layer, STRIDE threat modelling, RBAC and ABAC, reading a link's real host, a stack overflow on a toy memory diagram, and TOTP codes checked against RFC 6238.",
+			Blocks: SecurityBlocks},
 	}
 }
 
