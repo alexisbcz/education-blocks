@@ -535,6 +535,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive calendars and timekeeping course",
 			Lede:   "How people count days and keep time, with every calendar algorithm in exact integer arithmetic: leap-year rules and the Gregorian reform, the weekday by Zeller and by Doomsday, Julian Day Numbers, the Easter computus, the Metonic cycle, the lunar Islamic calendar, ISO week numbers, sundial hour lines, the pendulum clock, and Unix time with leap seconds and the 2038 overflow.",
 			Blocks: CalendarsBlocks},
+		{Slug: "moderncrypto", Name: "Modern Cryptography", Path: "/moderncrypto",
+			Title:  "The blocks of an interactive modern cryptography course",
+			Lede:   "How the cryptography in every HTTPS connection works, computed in the page: AES-128 round by round against the FIPS-197 vectors, why ECB leaks an image while CBC and CTR do not, why a nonce must never repeat, HMAC tags, authenticated encryption with AES-GCM, Shamir's secret sharing, a zero-knowledge proof of a graph colouring, PBKDF2 key stretching timed in your browser, a toy learning-with-errors scheme, and the TLS 1.3 handshake.",
+			Blocks: ModerncryptoBlocks},
 	}
 }
 
