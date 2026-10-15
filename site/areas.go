@@ -19,12 +19,12 @@ var areas = []struct {
 	slugs []string
 }{
 	{"Mathematics", []string{"linalg", "calculus", "geometry", "probability", "stats", "discrete", "crypto", "logic", "complex", "algebra", "chaos", "optimization"}},
-	{"Computing", []string{"ml", "algorithms", "arch", "graphics", "networking", "plt", "os", "databases", "infotheory", "qcomputing"}},
+	{"Computing", []string{"ml", "algorithms", "arch", "graphics", "networking", "plt", "os", "databases", "infotheory", "qcomputing", "security"}},
 	{"Physical sciences", []string{"physics", "quantum", "thermo", "em", "optics", "nuclear", "fluids", "chemistry", "astronomy"}},
 	{"Engineering", []string{"automotive", "rocketry", "materials", "signals", "control", "energy", "aerospace", "civil"}},
-	{"Earth & life sciences", []string{"geology", "climate", "biology", "genetics", "physiology", "pharmacology", "neuro", "epidemiology", "ecology", "paleo"}},
+	{"Earth & life sciences", []string{"geology", "climate", "biology", "genetics", "physiology", "pharmacology", "neuro", "epidemiology", "ecology", "paleo", "food", "sports"}},
 	{"Platform", []string{"platform"}},
-	{"Thinking & writing tools", []string{"argumentation", "languages", "novel"}},
+	{"Thinking & writing tools", []string{"argumentation", "languages", "novel", "learning"}},
 	{"Society & humanities", []string{"history", "sociology", "economics", "geography", "psychology", "philosophy", "linguistics", "music", "finance", "politics", "design"}},
 }
 

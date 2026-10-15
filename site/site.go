@@ -259,6 +259,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive optics and photography course",
 			Lede:   "Light, lenses and the camera, from a mirrorless camera cut open on a tripod: the exposure triangle in stops, depth of field from the thin-lens model, ray diagrams for lenses and mirrors, telescopes and microscopes, the Airy disk against pixel pitch, angle of view and crop factor, additive and subtractive color, Malus's law and dispersion in a prism.",
 			Blocks: OpticsBlocks},
+		{Slug: "politics", Name: "Voting & Political Science", Path: "/politics",
+			Title:  "The blocks of an interactive voting and political science course",
+			Lede:   "How rules turn votes into outcomes, with synthetic voters only: one ballot profile counted eight ways, Condorcet cycles, Arrow's conditions put to the test, spatial voting and the median voter, strategic ballots, apportionment in exact arithmetic with the Alabama paradox, districts you draw yourself with the efficiency gap, polling margins and a generic legislative process.",
+			Blocks: PoliticsBlocks},
 	}
 }
 
