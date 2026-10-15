@@ -61,3 +61,40 @@ if (current) {
   const nav = current.parentElement;
   nav.scrollLeft = current.offsetLeft - (nav.clientWidth - current.offsetWidth) / 2;
 }
+
+// Catalog filter: every word typed must appear in a card's subject name,
+// title or block titles. Areas with no match left disappear.
+const filter = document.querySelector("[data-catalog-filter]");
+if (filter) {
+  const cards = [...document.querySelectorAll("[data-catalog-card]")];
+  const groups = [...document.querySelectorAll("[data-catalog-group]")];
+  const empty = document.querySelector("[data-catalog-empty]");
+  const count = document.querySelector("[data-catalog-count]");
+  const apply = () => {
+    const words = filter.value.toLowerCase().split(/\s+/).filter(Boolean);
+    let shown = 0;
+    for (const c of cards) {
+      const hit = words.every((w) => c.dataset.catalogCard.includes(w));
+      c.hidden = !hit;
+      if (hit) shown++;
+    }
+    for (const g of groups) g.hidden = !g.querySelector("[data-catalog-card]:not([hidden])");
+    empty.hidden = shown > 0;
+    count.textContent = words.length ? `${shown} of ${cards.length} subjects` : "";
+  };
+  filter.addEventListener("input", apply);
+  filter.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && filter.value) {
+      filter.value = "";
+      apply();
+    }
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "/" || e.metaKey || e.ctrlKey || e.altKey) return;
+    const t = e.target;
+    if (t instanceof HTMLElement && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    e.preventDefault();
+    filter.focus();
+  });
+  apply();
+}

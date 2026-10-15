@@ -3,6 +3,7 @@ package site
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/alexisbcz/components/lib"
 	"github.com/alexisbcz/components/ui/button"
@@ -105,14 +106,16 @@ func catalog(r *http.Request) h.Node {
 				h.H1(h.Class("text-3xl font-semibold tracking-tight text-balance sm:text-4xl"), "Every subject, built from the same blocks"),
 				h.P(h.Class("text-base leading-relaxed text-pretty text-muted-foreground"),
 					fmt.Sprintf("%d subjects and %d interactive blocks, each one a Go function rendered on the server, with live models where the subject has them.", len(Collections()), total)),
+				catalogFilter(),
 			),
+			h.P(h.Data("catalog-empty", ""), h.Hidden(), h.Class("text-sm text-muted-foreground"), "No subject or block matches."),
 			h.Map(groupedCollections(), func(g areaGroup) h.Node {
-				return h.Section(h.Class("flex flex-col gap-4"),
+				return h.Section(h.Data("catalog-group", ""), h.Class("flex flex-col gap-4"),
 					h.H2(h.Class("font-mono text-xs tracking-wider text-muted-foreground uppercase"), g.name),
 					h.Div(h.Class("grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"),
 						h.Map(g.collections, func(c Collection) h.Node {
 							blocks := c.Blocks()
-							return h.A(h.Href(c.Path),
+							return h.A(h.Href(c.Path), h.Data("catalog-card", catalogText(c, blocks)),
 								h.Class("group flex flex-col gap-3 rounded-xl border bg-card p-4 shadow-xs outline-none transition-[border-color,box-shadow] duration-150 hover:border-foreground/25 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"),
 								h.Div(h.Class("flex items-center justify-between gap-2"),
 									h.Span(h.Class("font-medium tracking-tight"), c.Name),
@@ -134,4 +137,28 @@ func catalog(r *http.Request) h.Node {
 			siteFooter(),
 		),
 	)
+}
+
+// catalogFilter is the search box above the catalog; chrome.js hides the
+// cards and areas that don't match. "/" focuses it.
+func catalogFilter() h.Node {
+	return h.Div(h.Class("relative mt-2 w-full max-w-md"),
+		hugeicons.Search01Icon(h.Class("pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground")),
+		h.Input(h.Type("search"), h.Data("catalog-filter", ""), h.Aria("label", "Filter subjects and blocks"),
+			h.Placeholder("Filter subjects and blocks…"), h.Attr("autocomplete", "off"), h.Attr("spellcheck", "false"),
+			h.Class("h-9 w-full rounded-md border border-input bg-transparent py-1 pr-10 pl-9 text-sm shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [&::-webkit-search-cancel-button]:hidden"),
+		),
+		h.Kbd(h.Class("pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 rounded border px-1.5 font-mono text-[11px] text-muted-foreground"), "/"),
+		h.P(h.Data("catalog-count", ""), h.Aria("live", "polite"), h.Class("sr-only")),
+	)
+}
+
+// catalogText is what the filter matches a card against: the subject's name,
+// its area-independent title and every block title, lowercased.
+func catalogText(c Collection, blocks []Block) string {
+	parts := []string{c.Name, c.Title}
+	for _, b := range blocks {
+		parts = append(parts, b.Title)
+	}
+	return strings.ToLower(strings.Join(parts, " · "))
 }
