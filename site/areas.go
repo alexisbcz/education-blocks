@@ -25,7 +25,7 @@ var areas = []struct {
 	{"Earth & life sciences", []string{"geology", "climate", "biology", "genetics", "physiology", "pharmacology", "neuro", "epidemiology", "ecology", "paleo", "food", "sports", "agriculture", "imaging", "hydrology", "ocean", "immuno", "weather", "biochem", "nutrition"}},
 	{"Platform", []string{"platform", "assess"}},
 	{"Thinking & writing tools", []string{"argumentation", "languages", "novel", "learning", "media"}},
-	{"Society & humanities", []string{"history", "sociology", "economics", "geography", "psychology", "philosophy", "linguistics", "music", "finance", "politics", "design", "film", "archaeology", "transport", "behavioral", "law", "business", "ethics"}},
+	{"Society & humanities", []string{"history", "sociology", "economics", "geography", "psychology", "philosophy", "linguistics", "music", "finance", "politics", "design", "film", "archaeology", "transport", "behavioral", "law", "business", "ethics", "synth"}},
 }
 
 type areaGroup struct {

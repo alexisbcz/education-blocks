@@ -439,6 +439,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive nutrition science course",
 			Lede:   "The numbers behind what we eat, each with its evidence and limits stated: energy expenditure equations, why weight change plateaus, Atwater factors on a label, glycemic index against load, protein scores and complementing, EAR, RDA and UL, nutrient density per 100 kcal, what BMI misses, sodium and potassium, and healthy-user bias in a simulated cohort. Educational models, not dietary advice.",
 			Blocks: NutritionBlocks},
+		{Slug: "hci", Name: "HCI & UX Research", Path: "/hci",
+			Title:  "The blocks of an interactive HCI and UX research course",
+			Lede:   "How to predict, measure and test what people do with an interface: Fitts's and the steering law fitted to your own pointer, the keystroke-level model comparing two designs, how many test users find how many problems, scoring the System Usability Scale, small-sample task metrics, planning and reading an A/B test, what peeking does to false positives, card sorting with a dendrogram, and a heuristic evaluation of a flawed form.",
+			Blocks: HciBlocks},
 	}
 }
 
