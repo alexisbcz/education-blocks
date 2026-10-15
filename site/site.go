@@ -407,6 +407,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive distributed systems course",
 			Lede:   "Many machines, no shared clock, messages that arrive late or never, all simulated in the page: Lamport and vector clocks, the two generals and FLP, a working Raft cluster you can crash and partition, CAP and PACELC on a replicated store, read and write quorums, CRDTs that merge in any order, consistent hashing, gossip in log n rounds, tail latency at scale and retries with jitter.",
 			Blocks: DistsysBlocks},
+		{Slug: "toc", Name: "Theory of Computation", Path: "/toc",
+			Title:  "The blocks of an interactive theory of computation course",
+			Lede:   "What machines can and cannot do, with every machine running in the page: design a DFA and get the shortest counterexample, minimise one pair by pair, play the pumping lemma, step a pushdown automaton and a Turing machine, run the busy beaver champions up to BB(5)'s 47 million steps, see the diagonal argument behind the halting problem, place languages in the Chomsky hierarchy, reduce 3-SAT to independent set and watch DPLL search.",
+			Blocks: TocBlocks},
 	}
 }
 
