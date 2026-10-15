@@ -227,6 +227,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive energy systems course",
 			Lede:   "How energy is caught, stored and moved, from the physics up: a wind turbine whose pitch and power follow the wind, the Betz limit, a solar module's I–V curve, panel tilt over a clear day, batteries and Peukert's law, grid frequency after a plant trips, energy densities on log axes, conversion chains, heat pump COP, levelized cost and the storage that intermittency demands.",
 			Blocks: EnergyBlocks},
+		{Slug: "os", Name: "Operating Systems", Path: "/os",
+			Title:  "The blocks of an interactive operating systems course",
+			Lede:   "What the kernel does between your program and the hardware: six CPU schedulers on one workload, the five process states, address translation through a TLB, page replacement with Belady's anomaly, a race condition you interleave by hand, the banker's algorithm, dining philosophers, inode pointers, disk scheduling, heap fragmentation and a read() traced across the user/kernel boundary.",
+			Blocks: OsBlocks},
 	}
 }
 
