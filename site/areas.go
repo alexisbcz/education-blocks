@@ -21,7 +21,9 @@ var areas = []struct {
 	{"Mathematics", []string{"linalg", "calculus", "geometry", "probability", "stats", "discrete", "crypto", "logic"}},
 	{"Computing", []string{"ml", "algorithms", "arch"}},
 	{"Physical sciences", []string{"physics", "quantum", "thermo", "em", "chemistry", "astronomy"}},
-	{"Earth & life sciences", []string{"geology", "climate", "biology", "physiology", "neuro", "epidemiology", "paleo"}},
+	{"Engineering", []string{"automotive", "rocketry", "materials"}},
+	{"Earth & life sciences", []string{"geology", "climate", "biology", "genetics", "physiology", "neuro", "epidemiology", "paleo"}},
+	{"Thinking & writing tools", []string{"argumentation", "languages", "novel"}},
 	{"Society & humanities", []string{"history", "sociology", "economics", "geography", "psychology", "philosophy", "linguistics", "music"}},
 }
 
@@ -94,7 +96,7 @@ func catalog(r *http.Request) h.Node {
 	for _, c := range Collections() {
 		total += len(c.Blocks())
 	}
-	return pageShell(r, "Subjects", "Every subject of the interactive course platform, grouped by area.",
+	return pageShell(r, "", "Subjects", "Every subject of the interactive course platform, grouped by area.",
 		siteHeader("", "All subjects", 0),
 		h.Main(h.Class("mx-auto flex w-full max-w-[1400px] flex-col gap-14 px-4 py-10 sm:px-6 lg:px-8 lg:py-14"),
 			h.Section(h.Class("flex max-w-2xl flex-col gap-4"),

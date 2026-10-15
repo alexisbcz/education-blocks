@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io/fs"
 	"net/http"
+	"slices"
 	"strings"
-	"sync"
 
 	"github.com/alexisbcz/components/ui/badge"
 	"github.com/alexisbcz/components/ui/button"
@@ -25,26 +25,38 @@ const themeScript = `(() => {
   if (saved === "dark" || (!saved && matchMedia("(prefers-color-scheme: dark)").matches)) root.classList.add("dark");
 })();`
 
-// moduleLoader imports every module of static/js, each in isolation: a
-// module that fails to load or throws only loses its own blocks, never the
-// rest of the page. Helper modules (plot.js, svg.js, ...) only export, so
-// importing them is harmless. The list is read from the embedded files, so
-// a new subject's module is picked up without touching a shared file.
-var moduleLoader = sync.OnceValue(func() string {
+// linalgModules are the linear algebra gallery's modules, which predate
+// the one-file-per-subject naming.
+var linalgModules = []string{"matrix", "editor", "transform", "dot", "elimination", "exercises", "anatomy-loader", "shell"}
+
+// moduleLoader imports the modules a page needs, each in isolation: a
+// module that fails to load or throws only loses its own blocks. A page
+// gets chrome.js plus its subject's modules, found by name: <slug>.js and
+// <slug>-*.js in static/js (helpers such as plot.js are imported by the
+// modules themselves). So a new subject is picked up without touching a
+// shared file, and no page downloads another subject's figures.
+func moduleLoader(slug string) string {
 	entries, _ := fs.ReadDir(static, "static/js")
-	var paths []string
+	paths := []string{"/static/js/chrome.js"}
+	want := func(name string) bool {
+		base := strings.TrimSuffix(name, ".js")
+		if slug == "linalg" {
+			return slices.Contains(linalgModules, base)
+		}
+		return slug != "" && (base == slug || strings.HasPrefix(base, slug+"-"))
+	}
 	for _, e := range entries {
-		if !e.IsDir() && strings.HasSuffix(e.Name(), ".js") && e.Name() != "app.js" {
+		if !e.IsDir() && strings.HasSuffix(e.Name(), ".js") && want(e.Name()) {
 			paths = append(paths, "/static/js/"+e.Name())
 		}
 	}
 	list, _ := json.Marshal(paths)
 	return "for (const m of " + string(list) + ") import(m).catch((e) => console.error(`module ${m} failed:`, e));"
-})
+}
 
 // pageShell is the document every page shares: fonts, styles, the theme
 // script, the components' runtime and the block modules.
-func pageShell(r *http.Request, title, description string, body ...any) h.Node {
+func pageShell(r *http.Request, slug, title, description string, body ...any) h.Node {
 	return h.Doctype(h.Html(h.Lang("en"),
 		h.Head(
 			h.Meta(h.Charset("utf-8")),
@@ -57,7 +69,7 @@ func pageShell(r *http.Request, title, description string, body ...any) h.Node {
 			h.Link(h.Rel("stylesheet"), h.Href("/static/anatomy/iso.css")),
 			secure.Script(r, h.UnsafeJS(themeScript)),
 			runtime.Scripts(r),
-			secure.Script(r, h.Type("module"), h.UnsafeJS(moduleLoader())),
+			secure.Script(r, h.Type("module"), h.UnsafeJS(moduleLoader(slug))),
 		),
 		h.Body(append([]any{h.Class("min-h-svh bg-background font-sans text-foreground antialiased")}, body...)...),
 	))
@@ -65,7 +77,7 @@ func pageShell(r *http.Request, title, description string, body ...any) h.Node {
 
 func gallery(r *http.Request, c Collection) h.Node {
 	blocks := c.Blocks()
-	return pageShell(r, c.Name, c.Lede,
+	return pageShell(r, c.Slug, c.Name, c.Lede,
 		siteHeader(c.Slug, c.Name, len(blocks)),
 		h.Div(h.Class("mx-auto flex w-full max-w-[1400px] gap-10 px-4 sm:px-6 lg:px-8"),
 			sideNav(blocks),

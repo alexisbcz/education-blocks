@@ -1,3 +1,4 @@
 # Standalone previews written by figures/matvec/build.mjs
 figures/*/preview*.html
 .DS_Store
+dist/
