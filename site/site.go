@@ -383,6 +383,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive law course",
 			Lede:   "How lawyers reason, taught with real cases and labelled by jurisdiction: IRAC and CREAC answers, the elements of negligence and contract formation, who binds whom under stare decisis, statutory interpretation on Hart's vehicles in the park, standards of proof, the Hand formula, limitation periods, drafting vocabulary, legal systems compared, and case citations in Bluebook and OSCOLA. Educational, not legal advice.",
 			Blocks: LawBlocks},
+		{Slug: "distsys", Name: "Distributed Systems", Path: "/distsys",
+			Title:  "The blocks of an interactive distributed systems course",
+			Lede:   "Many machines, no shared clock, messages that arrive late or never, all simulated in the page: Lamport and vector clocks, the two generals and FLP, a working Raft cluster you can crash and partition, CAP and PACELC on a replicated store, read and write quorums, CRDTs that merge in any order, consistent hashing, gossip in log n rounds, tail latency at scale and retries with jitter.",
+			Blocks: DistsysBlocks},
 	}
 }
 
