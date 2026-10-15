@@ -367,6 +367,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive transport and urban systems course",
 			Lede:   "How traffic and cities behave, from the models engineers use: the fundamental diagram, phantom jams in a cellular automaton, shockwaves at a red light, Braess's paradox, selfish routing against the optimum, bus bunching and holding, Webster's signal cycle, walking isochrones on a synthetic town, urban scaling laws and the carbon of a commute. Stated models, synthetic cities.",
 			Blocks: TransportBlocks},
+		{Slug: "hydrology", Name: "Hydrology & Water Resources", Path: "/hydrology",
+			Title:  "The blocks of an interactive hydrology course",
+			Lede:   "Water through a landscape, every model computed exactly on synthetic catchments and records: residence times from a steady-state box balance, Horton infiltration and ponding, SCS Curve Number runoff, unit hydrograph convolution, Manning's equation in a trapezoidal channel, Gumbel flood frequency and return-period risk, Darcy and Thiem around a pumping well, reservoir sizing by the sequent peak algorithm, the Streeter–Phelps oxygen sag and D8 drainage networks.",
+			Blocks: HydrologyBlocks},
 	}
 }
 
