@@ -319,6 +319,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive computer security course",
 			Lede:   "Defensive security, attacked only in sandboxes: password entropy against pattern-aware guessing, hashing with salt and live PBKDF2 timing, XSS analysed in an inert document beside this page's own CSP, SQL injection on a toy parser next to parameterised queries, CSRF layer by layer, STRIDE threat modelling, RBAC and ABAC, reading a link's real host, a stack overflow on a toy memory diagram, and TOTP codes checked against RFC 6238.",
 			Blocks: SecurityBlocks},
+		{Slug: "methods", Name: "Research Methods", Path: "/methods",
+			Title:  "The blocks of an interactive research methods course",
+			Lede:   "How science finds things out, and how it fools itself: causal diagrams with the backdoor criterion, collider bias, why randomization works, the garden of forking paths, corrections for multiple tests, publication bias in a funnel plot, fixed- and random-effects meta-analysis, the winner's curse of underpowered studies, reliability against validity, and a study planner that sizes the sample and exports a preregistration.",
+			Blocks: MethodsBlocks},
 	}
 }
 
