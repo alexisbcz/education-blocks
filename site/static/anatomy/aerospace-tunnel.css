@@ -1,0 +1,13 @@
+.iso[data-anatomy="aerospace-tunnel"]{--anatomy-card:#0e0e0f;--anatomy-paper:#0e0e0f;--anatomy-plate-line:#262628;width:100%;max-width:760px;margin:0 auto;color:var(--anatomy-text)}
+.iso[data-anatomy="aerospace-tunnel"][data-theme="light"],html:not(.dark) .iso[data-anatomy="aerospace-tunnel"]{--anatomy-card:#ffffff;--anatomy-paper:#ffffff;--anatomy-plate-line:#e4e4e7}
+.iso[data-anatomy="aerospace-tunnel"] .iso-figure{margin:0}
+.iso[data-anatomy="aerospace-tunnel"] .iso-plate{box-shadow:0 0 0 1px var(--anatomy-plate-line);border-radius:10px;padding:46px 18px 50px}
+.iso[data-anatomy="aerospace-tunnel"] .iso-plate-corner{font-family:inherit;font-size:11px}
+.iso[data-anatomy="aerospace-tunnel"] .iso-plate-corner[data-corner="readout"]{font-variant-numeric:tabular-nums}
+.iso[data-anatomy="aerospace-tunnel"] .iso-plate-corner[data-corner="title"]{text-transform:none;letter-spacing:.04em}
+.iso[data-anatomy="aerospace-tunnel"] .iso-legend{font-size:13px}
+.iso[data-anatomy="aerospace-tunnel"] .aerospace-tunnel-stage{position:relative;outline:none;touch-action:pan-y}
+.iso[data-anatomy="aerospace-tunnel"] .aerospace-tunnel-stage:focus-visible{outline:1px solid var(--anatomy-muted);outline-offset:6px;border-radius:4px}
+.iso[data-anatomy="aerospace-tunnel"] .aerospace-tunnel-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.iso[data-anatomy="aerospace-tunnel"] [data-blades] path{fill:var(--anatomy-paper);stroke:var(--anatomy-mid,currentColor);stroke-width:.6;stroke-linejoin:round}
+@media (max-width:560px){.iso[data-anatomy="aerospace-tunnel"] .iso-plate{padding:40px 4px 64px}}

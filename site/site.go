@@ -239,6 +239,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive nuclear and particle physics course",
 			Lede:   "Inside the nucleus and beyond: a chart of nuclides with their decay modes, the binding-energy curve from the semi-empirical mass formula, mass defects and Q-values from real atomic masses, decay one atom at a time and in Bateman chains, fission and criticality, fusion against the Coulomb barrier, shielding, dose in gray and sievert, and the Standard Model with a hadron builder.",
 			Blocks: NuclearBlocks},
+		{Slug: "aerospace", Name: "Aerospace & Flight", Path: "/aerospace",
+			Title:  "The blocks of an interactive aerospace course",
+			Lede:   "How aircraft fly, from a benchtop wind tunnel whose balance weighs a wing's lift and drag: the four forces and the glide, the standard atmosphere and the lift equation, lift curves and drag polars, NACA sections drawn from their formulas, pitot-static airspeed, the V–n envelope, turning flight, Breguet range and rotors in hover.",
+			Blocks: AerospaceBlocks},
 	}
 }
 
