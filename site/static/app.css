@@ -404,6 +404,11 @@
       stroke: var(--ring);
     }
   }
+  .\[\&\:focus-visible\>circle\]\:stroke-\[3px\] {
+    &:focus-visible>circle {
+      stroke-width: 3px;
+    }
+  }
   .\[\&\:has\(\[role\=checkbox\]\)\]\:pr-0 {
     &:has([role=checkbox]) {
       padding-right: calc(var(--spacing) * 0);

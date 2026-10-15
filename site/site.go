@@ -363,6 +363,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive course on large language models",
 			Lede:   "How language models work, by building tiny ones in the browser: a BPE tokenizer trained on your text, a character n-gram model with exact perplexity, word vectors from co-occurrence and SVD, attention with every matrix shown, positional encodings, a small neural model trained by backprop, decoding with temperature, top-k and top-p, the memory cost of long contexts, and how base models become assistants. Toy scale throughout.",
 			Blocks: LlmBlocks},
+		{Slug: "transport", Name: "Transport & Urban Systems", Path: "/transport",
+			Title:  "The blocks of an interactive transport and urban systems course",
+			Lede:   "How traffic and cities behave, from the models engineers use: the fundamental diagram, phantom jams in a cellular automaton, shockwaves at a red light, Braess's paradox, selfish routing against the optimum, bus bunching and holding, Webster's signal cycle, walking isochrones on a synthetic town, urban scaling laws and the carbon of a commute. Stated models, synthetic cities.",
+			Blocks: TransportBlocks},
 	}
 }
 
