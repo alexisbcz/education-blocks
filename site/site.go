@@ -483,6 +483,10 @@ func Collections() []Collection {
 			Title:  "The instructor tools of the platform",
 			Lede:   "The other side of the lessons, for the people who write and run them: a prerequisite graph with its unlock order and a learner's frontier, item analysis of a quiz, learning objectives checked against Bloom's verbs and aligned with activities and assessments, a rubric builder, a lesson storyboard with time estimates, cohort analytics, the decision panel for a lesson experiment, a feedback comment bank with a tone check, misconception rules tested against wrong answers, and a grade book with its policies spelled out.",
 			Blocks: TeachBlocks},
+		{Slug: "combinatorics", Name: "Combinatorics", Path: "/combinatorics",
+			Title:  "The blocks of an interactive combinatorics course",
+			Lede:   "Counting by matching things up, with every count exact: stars and bars, Catalan numbers drawn four ways in sync, partitions and Young diagrams with Euler's pentagonal recurrence, Glaisher's bijection between distinct and odd parts, derangements and 1/e, set partitions with Stirling and Bell numbers, making change with generating functions, domino tilings and their recurrences, Ramsey's R(3, 3) = 6, and the ballot problem by reflection.",
+			Blocks: CombinatoricsBlocks},
 	}
 }
 

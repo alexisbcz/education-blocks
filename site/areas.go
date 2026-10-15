@@ -24,7 +24,7 @@ var areas = []struct {
 	{"Physical sciences", []string{"physics", "quantum", "thermo", "em", "optics", "nuclear", "fluids", "chemistry", "astronomy", "astro", "compchem"}},
 	{"Engineering", []string{"automotive", "rocketry", "materials", "signals", "control", "energy", "aerospace", "civil", "electronics", "audio", "mechanical", "robotics", "semi", "marine", "building"}},
 	{"Earth & life sciences", []string{"geology", "climate", "biology", "genetics", "physiology", "pharmacology", "neuro", "epidemiology", "ecology", "paleo", "food", "sports", "agriculture", "imaging", "hydrology", "ocean", "immuno", "weather", "biochem", "nutrition", "forensics", "phylo"}},
-	{"Platform", []string{"platform", "assess", "teach"}},
+	{"Platform", []string{"platform", "assess", "teach", "prose"}},
 	{"Thinking & writing tools", []string{"argumentation", "languages", "novel", "learning", "media"}},
 	{"Society & humanities", []string{"history", "sociology", "economics", "geography", "psychology", "philosophy", "linguistics", "music", "finance", "politics", "design", "film", "archaeology", "transport", "behavioral", "law", "business", "ethics", "synth"}},
 }
