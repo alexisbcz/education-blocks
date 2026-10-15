@@ -323,6 +323,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive research methods course",
 			Lede:   "How science finds things out, and how it fools itself: causal diagrams with the backdoor criterion, collider bias, why randomization works, the garden of forking paths, corrections for multiple tests, publication bias in a funnel plot, fixed- and random-effects meta-analysis, the winner's curse of underpowered studies, reliability against validity, and a study planner that sizes the sample and exports a preregistration.",
 			Blocks: MethodsBlocks},
+		{Slug: "audio", Name: "Audio Engineering", Path: "/audio",
+			Title:  "The blocks of an interactive audio engineering course",
+			Lede:   "Sound for the studio, computed and heard in the page: decibels that add as powers, A- and C-weighting, a parametric EQ read back from its own filters, a compressor written sample by sample, Sabine's reverberation time with a convolution reverb, pan laws and mid/side width, microphone polar patterns, comb filtering between two mics, BS.1770 loudness with true peak, and tempo and file-size calculators.",
+			Blocks: AudioBlocks},
 	}
 }
 
