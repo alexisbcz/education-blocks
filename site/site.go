@@ -463,6 +463,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive applied ethics course",
 			Lede:   "Contested questions put into numbers you can change, without a verdict: five theories of distributive justice ranking the same allocations, risk aversion behind the veil of ignorance, which principle fits your answers to six trolley cases, why fairness criteria for a risk score collide, the discount rate on future harms, a health budget allocated by QALYs, choosing under moral uncertainty, a fishery as a commons, the repugnant conclusion, and research consent against the Belmont principles.",
 			Blocks: EthicsBlocks},
+		{Slug: "search", Name: "Search & Retrieval", Path: "/search",
+			Title:  "The blocks of an interactive information retrieval course",
+			Lede:   "How a search engine finds and ranks, run live on forty short science notes: an inverted index with stemming, Boolean merges with skip pointers and phrase queries, tf-idf with cosine similarity, BM25's saturation and length normalisation, precision, average precision and nDCG, PageRank against a random surfer, spelling correction by edit distance, autocomplete with a trie, Bloom filters, and nearest-neighbour search with random hyperplanes.",
+			Blocks: SearchBlocks},
 	}
 }
 
