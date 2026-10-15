@@ -211,6 +211,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive finance and accounting course",
 			Lede:   "The arithmetic of money, computed exactly: double-entry bookkeeping to a trial balance, three statements that move together, break-even, NPV and IRR, loan amortization, bond duration and convexity, Black–Scholes with its Greeks, option strategies, binomial trees and the efficient frontier. Educational only: not financial advice.",
 			Blocks: FinanceBlocks},
+		{Slug: "networking", Name: "Networking & the Web", Path: "/networking",
+			Title:  "The blocks of an interactive networking course",
+			Lede:   "How data actually crosses the internet, computed in the page: headers added layer by layer, the TCP handshake with real sequence numbers, Reno's congestion window, subnets bit by bit, link-state against distance-vector routing, a DNS lookup with its cache, the TLS 1.3 handshake, raw HTTP with ETags, latency against bandwidth, and the CSS box model and flexbox.",
+			Blocks: NetworkingBlocks},
 	}
 }
 
