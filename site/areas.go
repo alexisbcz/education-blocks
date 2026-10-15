@@ -22,7 +22,7 @@ var areas = []struct {
 	{"Computing", []string{"ml", "algorithms", "arch", "graphics", "networking", "plt", "os", "databases", "infotheory", "qcomputing", "security", "dataviz"}},
 	{"Physical sciences", []string{"physics", "quantum", "thermo", "em", "optics", "nuclear", "fluids", "chemistry", "astronomy"}},
 	{"Engineering", []string{"automotive", "rocketry", "materials", "signals", "control", "energy", "aerospace", "civil", "electronics", "audio", "mechanical"}},
-	{"Earth & life sciences", []string{"geology", "climate", "biology", "genetics", "physiology", "pharmacology", "neuro", "epidemiology", "ecology", "paleo", "food", "sports"}},
+	{"Earth & life sciences", []string{"geology", "climate", "biology", "genetics", "physiology", "pharmacology", "neuro", "epidemiology", "ecology", "paleo", "food", "sports", "agriculture", "imaging"}},
 	{"Platform", []string{"platform"}},
 	{"Thinking & writing tools", []string{"argumentation", "languages", "novel", "learning"}},
 	{"Society & humanities", []string{"history", "sociology", "economics", "geography", "psychology", "philosophy", "linguistics", "music", "finance", "politics", "design"}},
