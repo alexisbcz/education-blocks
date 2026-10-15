@@ -503,6 +503,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive network science course",
 			Lede:   "How networks are built and how they break, on networks generated live from a seeded random number generator: the giant component of a random graph, preferential attachment and power laws, the friendship paradox, failure against attack on hubs, percolation on a lattice, community detection by modularity, epidemic thresholds and vaccination strategies, degree assortativity, triangles against a null model, and force-directed layout.",
 			Blocks: NetsciBlocks},
+		{Slug: "phylo", Name: "Evolution & Phylogenetics", Path: "/phylo",
+			Title:  "The blocks of an interactive evolution and phylogenetics course",
+			Lede:   "How trees of life are inferred and what population genetics says about the lineages on them, on sequences and genealogies simulated live: UPGMA against neighbour joining, maximum parsimony over every tree for five taxa, long-branch attraction, the Jukes–Cantor correction, dating an outbreak with a molecular clock, the coalescent, Kimura's fixation probability, reading clades, bootstrap support and phylogenetic independent contrasts.",
+			Blocks: PhyloBlocks},
 	}
 }
 
