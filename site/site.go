@@ -451,6 +451,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive HCI and UX research course",
 			Lede:   "How to predict, measure and test what people do with an interface: Fitts's and the steering law fitted to your own pointer, the keystroke-level model comparing two designs, how many test users find how many problems, scoring the System Usability Scale, small-sample task metrics, planning and reading an A/B test, what peeking does to false positives, card sorting with a dendrogram, and a heuristic evaluation of a flawed form.",
 			Blocks: HciBlocks},
+		{Slug: "gametheory", Name: "Game Theory", Path: "/gametheory",
+			Title:  "The blocks of an interactive game theory course",
+			Lede:   "Strategic thinking computed exactly: every equilibrium of a 3×3 game by support enumeration, iterated dominance, backward induction and non-credible threats, the minimax theorem by the graphical method, replicator dynamics on the simplex, first- and second-price auctions with revenue equivalence, Gale–Shapley stable matching, the Shapley value over every ordering, Rubinstein bargaining and a traffic light as a correlated equilibrium.",
+			Blocks: GametheoryBlocks},
 	}
 }
 
