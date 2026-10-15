@@ -267,6 +267,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive voting and political science course",
 			Lede:   "How rules turn votes into outcomes, with synthetic voters only: one ballot profile counted eight ways, Condorcet cycles, Arrow's conditions put to the test, spatial voting and the median voter, strategic ballots, apportionment in exact arithmetic with the Alabama paradox, districts you draw yourself with the efficiency gap, polling margins and a generic legislative process.",
 			Blocks: PoliticsBlocks},
+		{Slug: "pharmacology", Name: "Pharmacology", Path: "/pharmacology",
+			Title:  "The blocks of an interactive pharmacology course",
+			Lede:   "What the body does to a drug and what the drug does to the body, with a generic drug and illustrative numbers: one- and two-compartment kinetics, oral absorption, repeated dosing to steady state, infusions and loading doses, the therapeutic index, receptor occupancy, interactions through clearance, saturable elimination and variability across a population. Educational only, not medical advice: never use these models for dosing.",
+			Blocks: PharmacologyBlocks},
 	}
 }
 
