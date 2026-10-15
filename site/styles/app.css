@@ -1,0 +1,343 @@
+/* Theme of the block gallery. cmd/gen prepends the Tailwind imports and
+   the @source lines, then builds site/static/app.css. */
+
+@custom-variant dark (&:is(.dark *));
+
+@font-face {
+  font-family: "Geist";
+  src: url("/static/fonts/Geist-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/static/fonts/GeistMono-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+/* Metric-matched fallback, so the swap to Geist does not shift the layout. */
+@font-face {
+  font-family: "Geist Fallback";
+  src: local("Arial");
+  size-adjust: 104.76%;
+  ascent-override: 95.94%;
+  descent-override: 28.16%;
+}
+
+/* shadcn/ui new-york-v4 "neutral", the palette Pierre's sites use too. */
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+
+  /* Hypercode's pink, for the brand mark and the current lesson. */
+  --brand: oklch(0.592 0.218 354);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+
+  /* Code surfaces, after @pierre/theme "pierre-light". */
+  --code-bg: #ffffff;
+  --code-panel: #f8f8f8;
+  --code-fg: #0a0a0a;
+  --code-number: #a3a3a3;
+  --code-number-active: #525252;
+  --code-line-hl: #dfebff8c;
+  --code-selection: #009fff2e;
+  --code-add: #18a46c;
+  --code-del: #d52c36;
+  --code-mod: #009fff;
+  --tok-comment: #737373;
+  --tok-string: #199f43;
+  --tok-number: #1ca1c7;
+  --tok-constant: #d5a910;
+  --tok-keyword: #d32a61;
+  --tok-function: #693acf;
+  --tok-builtin: #a631be;
+  --tok-decorator: #d5512f;
+  --tok-operator: #08c0ef;
+  --tok-punct: #636363;
+
+  /* Mathematical objects keep one color everywhere: i-hat, j-hat, results. */
+  --vec-i: #18a46c;
+  --vec-j: #d52c36;
+  --vec-u: #009fff;
+  --vec-v: #693acf;
+  --vec-out: #d5a910;
+
+  /* Motion (Emil Kowalski): strong ease-out for enter/exit, ease-in-out for
+     on-screen movement. Never ease-in. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.17 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+
+  --brand: oklch(0.718 0.202 349.761);
+  --sidebar: oklch(0.17 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.985 0 0);
+  --sidebar-primary-foreground: oklch(0.205 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+
+  --code-bg: #0a0a0a;
+  --code-panel: #0f0f10;
+  --code-fg: #fafafa;
+  --code-number: #5c5c5c;
+  --code-number-active: #a3a3a3;
+  --code-line-hl: #19283c8c;
+  --code-selection: #009fff4d;
+  --code-add: #07c480;
+  --code-del: #ff2e3f;
+  --code-mod: #009fff;
+  --tok-comment: #737373;
+  --tok-string: #5ecc71;
+  --tok-number: #68cdf2;
+  --tok-constant: #ffd452;
+  --tok-keyword: #ff678d;
+  --tok-function: #9d6afb;
+  --tok-builtin: #d568ea;
+  --tok-decorator: #ff855e;
+  --tok-operator: #08c0ef;
+  --tok-punct: #8a8a8a;
+
+  --vec-i: #07c480;
+  --vec-j: #ff2e3f;
+  --vec-u: #009fff;
+  --vec-v: #9d6afb;
+  --vec-out: #ffd452;
+}
+
+@theme inline {
+  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, Menlo, "DejaVu Sans Mono", monospace;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-brand: var(--brand);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-code: var(--code-bg);
+  --color-code-panel: var(--code-panel);
+  --color-code-foreground: var(--code-fg);
+  --color-add: var(--code-add);
+  --color-del: var(--code-del);
+  --color-mod: var(--code-mod);
+  --color-vec-i: var(--vec-i);
+  --color-vec-j: var(--vec-j);
+  --color-vec-u: var(--vec-u);
+  --color-vec-v: var(--vec-v);
+  --color-vec-out: var(--vec-out);
+  --ease-out-strong: var(--ease-out);
+  --ease-in-out-strong: var(--ease-in-out);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "ss01" 0;
+  }
+  ::selection {
+    background: var(--code-selection);
+  }
+  math {
+    font-family: "STIX Two Math", "Latin Modern Math", "Cambria Math", math;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+/* Outline buttons press in (Emil: 0.97 over 160ms ease-out). */
+@layer components {
+  [data-slot="button"] {
+    transition-property: color, background-color, border-color, box-shadow, transform;
+    transition-duration: 160ms;
+    transition-timing-function: var(--ease-out);
+  }
+  [data-slot="button"]:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
+  .preview {
+    background-image: radial-gradient(color-mix(in oklab, var(--foreground) 7%, transparent) 1px, transparent 1px);
+    background-size: 16px 16px;
+    background-position: -8px -8px;
+  }
+
+  /* Code: Pierre's layout (14px/20px, gutter, line highlight). */
+  .code {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 20px;
+    font-variant-ligatures: none;
+    tab-size: 4;
+    color: var(--code-fg);
+  }
+  .code .ln {
+    color: var(--code-number);
+    user-select: none;
+    text-align: right;
+    padding-inline: 1ch 2ch;
+    font-variant-numeric: tabular-nums;
+  }
+  .code .line[data-highlighted] {
+    background: var(--code-line-hl);
+  }
+  .code .line[data-highlighted] .ln {
+    color: var(--code-number-active);
+  }
+  .tok-comment { color: var(--tok-comment); font-style: italic; }
+  .tok-string { color: var(--tok-string); }
+  .tok-number { color: var(--tok-number); }
+  .tok-constant { color: var(--tok-constant); }
+  .tok-keyword { color: var(--tok-keyword); }
+  .tok-function { color: var(--tok-function); }
+  .tok-builtin { color: var(--tok-builtin); }
+  .tok-decorator { color: var(--tok-decorator); }
+  .tok-operator { color: var(--tok-operator); }
+  .tok-punct { color: var(--tok-punct); }
+
+  /* Diff lines: the background mixes the change color into the surface. */
+  .diff-add { background: color-mix(in lab, var(--code-bg) 88%, var(--code-add)); }
+  .diff-del { background: color-mix(in lab, var(--code-bg) 88%, var(--code-del)); }
+  .dark .diff-add { background: color-mix(in lab, var(--code-bg) 80%, var(--code-add)); }
+  .dark .diff-del { background: color-mix(in lab, var(--code-bg) 80%, var(--code-del)); }
+  .diff-add > .ln:first-child { box-shadow: inset 4px 0 0 var(--code-add); }
+  .diff-add .ln { color: var(--code-add); }
+  .diff-del .ln { color: var(--code-del); }
+  .diff-del > .ln:first-child {
+    background-image: repeating-linear-gradient(to bottom, var(--code-del) 0 2px, transparent 2px 4px);
+    background-size: 4px 100%;
+    background-repeat: no-repeat;
+  }
+  .word-add { background: color-mix(in srgb, var(--code-add) 18%, transparent); border-radius: 3px; box-decoration-break: clone; }
+  .word-del { background: color-mix(in srgb, var(--code-del) 18%, transparent); border-radius: 3px; box-decoration-break: clone; }
+
+  /* Matrices: brackets drawn with borders, like a printed textbook. */
+  .matrix {
+    position: relative;
+    display: inline-grid;
+    padding: 6px 12px;
+  }
+  .matrix::before,
+  .matrix::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 7px;
+    border: 1.5px solid currentColor;
+    opacity: 0.85;
+  }
+  .matrix::before { left: 0; border-right: 0; border-radius: 3px 0 0 3px; }
+  .matrix::after { right: 0; border-left: 0; border-radius: 0 3px 3px 0; }
+
+  /* Thin scrollbars that show on hover (Pierre). */
+  .scroll-thin {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+  }
+  .scroll-thin:hover {
+    scrollbar-color: color-mix(in oklab, var(--foreground) 20%, transparent) transparent;
+  }
+
+  /* Enter animation for things that appear: from 0.97 and transparent,
+     never from scale(0). */
+  .enter {
+    transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
+    @starting-style {
+      opacity: 0;
+      transform: translateY(4px) scale(0.98);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-slot="button"]:active:not(:disabled) {
+    transform: none;
+  }
+  .enter {
+    transition: opacity 200ms ease;
+    @starting-style {
+      transform: none;
+    }
+  }
+}
