@@ -455,6 +455,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive game theory course",
 			Lede:   "Strategic thinking computed exactly: every equilibrium of a 3×3 game by support enumeration, iterated dominance, backward induction and non-credible threats, the minimax theorem by the graphical method, replicator dynamics on the simplex, first- and second-price auctions with revenue equivalence, Gale–Shapley stable matching, the Shapley value over every ordering, Rubinstein bargaining and a traffic light as a correlated equilibrium.",
 			Blocks: GametheoryBlocks},
+		{Slug: "ethics", Name: "Applied Ethics", Path: "/ethics",
+			Title:  "The blocks of an interactive applied ethics course",
+			Lede:   "Contested questions put into numbers you can change, without a verdict: five theories of distributive justice ranking the same allocations, risk aversion behind the veil of ignorance, which principle fits your answers to six trolley cases, why fairness criteria for a risk score collide, the discount rate on future harms, a health budget allocated by QALYs, choosing under moral uncertainty, a fishery as a commons, the repugnant conclusion, and research consent against the Belmont principles.",
+			Blocks: EthicsBlocks},
 	}
 }
 
