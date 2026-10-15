@@ -296,7 +296,7 @@ func inclineBlock() Block {
 						legendSwatch("var(--ion-na)", "friction"),
 						legendSwatch("var(--vec-out)", "components"),
 					),
-					h.Svg(h.Data("plot", ""), h.ViewBox("0 0 560 340"), h.Class("mx-auto block w-full max-w-[640px]"), h.Role("img"), h.Aria("label", "Block on an inclined plane with forces")),
+					h.Svg(h.Data("plot", ""), h.ViewBox("0 0 560 400"), h.Class("mx-auto block w-full max-w-[640px]"), h.Role("img"), h.Aria("label", "Block on an inclined plane with forces")),
 				),
 				h.Div(h.Class("flex flex-col gap-2"), panelLabel("Slope"),
 					field("angle", "Angle θ", "°", 25, 0, 80, 0.5),

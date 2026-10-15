@@ -651,36 +651,42 @@ for (const root of document.querySelectorAll("[data-incline]")) {
     const a = slides ? Math.max(0, G * (Math.sin(th) - muk * Math.cos(th))) : 0;
 
     svg.replaceChildren();
-    const Ax = 70, Ay = 310;
-    const L = Math.min(400, th > 0 ? 270 / Math.sin(th) : 400);
+    const Ax = 70, Ay = 290;
+    const L = Math.min(400, th > 0 ? 260 / Math.sin(th) : 400);
     const Cx = Ax + L * Math.cos(th), Cy = Ay - L * Math.sin(th);
-    el("path", { d: `M${Ax} ${Ay} L${Cx} ${Ay} L${Cx} ${Cy} Z`, style: "fill:currentColor;fill-opacity:0.06;stroke:currentColor;stroke-opacity:0.5;stroke-width:1.5" }, svg);
+    el("path", { d: `M${Ax} ${Ay} L${Cx} ${Ay} L${Cx} ${Cy} Z`, style: "fill:currentColor;fill-opacity:0.06;stroke:currentColor;stroke-opacity:0.5;stroke-width:1.5;stroke-linejoin:round" }, svg);
     el("line", { x1: 30, x2: 540, y1: Ay, y2: Ay, style: "stroke:currentColor;stroke-opacity:0.3" }, svg);
     // Angle arc at the foot.
     if (th > 0.01) {
       const r = 46;
       el("path", { d: `M${Ax + r} ${Ay} A${r} ${r} 0 0 0 ${Ax + r * Math.cos(th)} ${Ay - r * Math.sin(th)}`, style: "fill:none;stroke:currentColor;stroke-opacity:0.5" }, svg);
-      text(svg, Ax + r + 6, Ay - 8, `θ = ${num(deg(th), 1)}°`);
+      // Under the ground line when the slope is too shallow to leave room.
+      text(svg, Ax + r + 6, deg(th) < 16 ? Ay + 16 : Ay - 8, `θ = ${num(deg(th), 1)}°`);
     }
-    // The block: centred on the slope's midpoint, sitting on its surface.
+    // The block rests on the slope: its bottom face lies on the surface, so
+    // its centre of mass is half its height out along the surface normal.
     const tx = Math.cos(th), ty = -Math.sin(th); // up the slope (screen)
     const nx = -Math.sin(th), ny = -Math.cos(th); // out of the slope (screen)
     const bw = 64, bh = 40;
-    const mx = Ax + (L / 2) * tx, my = Ay + (L / 2) * ty;
-    const cx = mx + nx * (bh / 2), cy = my + ny * (bh / 2);
+    const mx = Ax + (L / 2) * tx, my = Ay + (L / 2) * ty; // middle of the contact face
+    const cx = mx + nx * (bh / 2), cy = my + ny * (bh / 2); // centre of mass
     const corner = (u, v) => [cx + tx * u + nx * v, cy + ty * u + ny * v];
     const pts = [corner(-bw / 2, -bh / 2), corner(bw / 2, -bh / 2), corner(bw / 2, bh / 2), corner(-bw / 2, bh / 2)];
-    el("path", { d: "M" + pts.map((p) => p.join(",")).join(" L") + " Z", style: `fill:var(--background);stroke:${slides ? "var(--brand)" : "var(--foreground)"};stroke-width:1.75` }, svg);
+    el("path", { d: "M" + pts.map((p) => p.join(",")).join(" L") + " Z", style: `fill:var(--background);stroke:${slides ? "var(--brand)" : "var(--foreground)"};stroke-width:1.75;stroke-linejoin:round` }, svg);
 
-    // Forces, 110 px for the weight.
-    const k = 110 / W;
-    arrowPx(svg, cx, cy, cx, cy + W * k, "var(--foreground)", 2);
+    // Forces, all from the centre of mass. The weight is 100 px at most, and
+    // shorter when the block sits low enough for it to leave the drawing.
+    const k = Math.min(100, 392 - cy) / W;
     arrowPx(svg, cx, cy, cx - tx * along * k, cy - ty * along * k, "var(--vec-out)", 1.5, "4 3");
     arrowPx(svg, cx, cy, cx - nx * N * k, cy - ny * N * k, "var(--vec-out)", 1.5, "4 3");
-    arrowPx(svg, mx, my, mx + nx * N * k, my + ny * N * k, "var(--vec-u)", 2);
-    const fx = mx - nx * 2, fy = my - ny * 2;
-    arrowPx(svg, fx, fy, fx + tx * fric * k, fy + ty * fric * k, "var(--ion-na)", 2);
-    text(svg, cx + 6, cy + W * k, `mg = ${num(W, 1)} N`, { class: "fill-foreground font-mono text-[10px]" });
+    arrowPx(svg, cx, cy, cx + nx * N * k, cy + ny * N * k, "var(--vec-u)", 2);
+    arrowPx(svg, cx, cy, cx + tx * fric * k, cy + ty * fric * k, "var(--ion-na)", 2);
+    arrowPx(svg, cx, cy, cx, cy + W * k, "var(--foreground)", 2);
+    el("circle", { cx, cy, r: 3.5, style: "fill:var(--background);stroke:var(--foreground);stroke-width:1.5" }, svg);
+    // The label goes on the side the components leave free: the normal
+    // component heads down-right, the along-slope one down-left, steeper as θ grows.
+    const left = deg(th) < 45;
+    text(svg, cx + (left ? -7 : 7), cy + W * k * 0.62, `mg = ${num(W, 1)} N`, { "text-anchor": left ? "end" : "start", class: "fill-foreground font-mono text-[10px]", style: "paint-order:stroke;stroke:var(--background);stroke-width:3px;stroke-linejoin:round" });
 
     o.n.textContent = `${num(N, 2)} N`;
     o.f.textContent = `${num(fric, 2)} N ${slides ? "(kinetic)" : "(static)"}`;

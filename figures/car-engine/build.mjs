@@ -33,11 +33,15 @@ const xOf = (deg) => {
   return MM.r * Math.cos(t) + Math.sqrt(MM.l * MM.l - (MM.r * Math.sin(t)) ** 2);
 };
 const liftOf = (deg, ev) => {
-  // smooth sin² lift between the opening and closing angles, cycle 720°
-  let a = (((deg - ev.open) % 720) + 720) % 720;
+  // A tangent cam under a flat bucket: base circle, straight flanks and a
+  // nose circle. The bucket rides the cam's support function, so the lift at
+  // cam angle ψ from the nose is L (cos ψ − cos h) / (1 − cos h), where h is
+  // half the event in cam degrees (cam at half crank speed). Cycle 720°.
+  const a = (((deg - ev.open) % 720) + 720) % 720;
   const span = ev.close - ev.open;
   if (a > span) return 0;
-  return ev.lift * Math.sin((Math.PI * a) / span) ** 2;
+  const h = (span / 4) * (Math.PI / 180), psi = ((a - span / 2) / 2) * (Math.PI / 180);
+  return Math.max(0, (ev.lift * (Math.cos(psi) - Math.cos(h))) / (1 - Math.cos(h)));
 };
 
 // ---------------------------------------------------------------- layout (world units, z up; +y toward the viewer)
@@ -56,8 +60,8 @@ const HEAD_H = 18;
 const TOP_Z = HEAD_Z + HEAD_H;
 const VX = { intake: -9, exhaust: 9 }; // valve axes, x
 const VALVE_R = 6; // valve head radius
-const CAM_Z = TOP_Z + 22; // camshaft axes (along y)
-const CAM_BASE = 6.5, CAM_NOSE = EV.intake.lift * S; // base circle, nose rise
+const CAM_Z = TOP_Z + 22.5; // camshaft axes (along y)
+const CAM_BASE = 7, CAM_NOSE = EV.intake.lift * S, CAM_W = 2.6; // base circle, nose rise, half the lobe width
 const FLY = { y0: -48, y1: -41, r: 36 };
 const YU = [-26, 24]; // bearing uprights
 const BELT_Y = -33; // timing belt plane, behind the cylinder
@@ -317,27 +321,39 @@ const springOf = (x, lift) => coilZ(x, TOP_Z + 1, STEM_TOP - 1.6 - lift, SPRING_
 function springSeats() {
   return [VX.intake, VX.exhaust].map((x) => S_(k.cylinder(x, 0, SPRING_R, TOP_Z, 1, P, 24), { tone: "lo" })).join("");
 }
-// A cam lobe in its own plane (y = 0 face of the cam), turned to the cam angle;
-// the nose points down at the centre of the valve's event.
+// A cam lobe: a tangent cam (base circle, two straight flanks, nose circle)
+// whose nose points down at the centre of the valve's event, extruded
+// ±CAM_W along the camshaft. Its lift matches liftOf exactly: the nose
+// circle's centre sits d = L / (1 − cos h) out, with radius Rb − L cos h / (1 − cos h).
 function camLobe(which, deg) {
   const ev = EV[which];
   const centre = (ev.open + ev.close) / 2;
   const phi = ((deg - centre) / 2) * (Math.PI / 180); // cam turns at half speed
+  const h = ((ev.close - ev.open) / 4) * (Math.PI / 180); // half the event, cam radians
+  const d = CAM_NOSE / (1 - Math.cos(h)), rn = CAM_BASE - d + CAM_NOSE;
   const cx = VX[which];
-  const pts = [];
-  for (let i = 0; i <= 48; i++) {
-    const u = (i / 48) * 2 * Math.PI;
-    // base circle plus a smooth nose of height CAM_NOSE pointing at angle 0 (down)
-    const halfWidth = ((ev.close - ev.open) / 2 / 2) * (Math.PI / 180); // half the event, in cam degrees
-    let d = Math.abs(((u + Math.PI) % (2 * Math.PI)) - Math.PI);
-    const r = CAM_BASE + (d < halfWidth ? CAM_NOSE * Math.cos((Math.PI / 2) * (d / halfWidth)) ** 2 : 0);
-    const ang = u + phi;
-    pts.push([cx + r * Math.sin(ang), 0, CAM_Z - r * Math.cos(ang)]);
-  }
-  return `<path class="ce-cam" d="M${pts.map(M).join("L")}Z"/>`;
+  const ring = [];
+  for (let i = 0; i <= 16; i++) ring.push([d, rn, -h + (2 * h * i) / 16]); // nose arc
+  for (let i = 0; i <= 40; i++) ring.push([0, CAM_BASE, h + ((2 * Math.PI - 2 * h) * i) / 40]); // base arc
+  const face = (y) => ring.map(([off, r, u]) => {
+    const a0 = phi, a1 = u + phi; // nose axis, then the point's direction
+    return [cx + off * Math.sin(a0) + r * Math.sin(a1), y, CAM_Z - off * Math.cos(a0) - r * Math.cos(a1)];
+  });
+  const front = face(CAM_W), back = face(-CAM_W);
+  // The lobe is convex, so its outline is the hull of both faces.
+  const pts = front.concat(back).map(at).sort((p, q) => p[0] - q[0] || p[1] - q[1]);
+  const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const half = (list) => { const out = []; for (const p of list) { while (out.length > 1 && cross(out[out.length - 2], out[out.length - 1], p) <= 0) out.pop(); out.push(p); } out.pop(); return out; };
+  const hull = half(pts).concat(half(pts.slice().reverse()));
+  const P2 = (q) => q[0].toFixed(2) + " " + q[1].toFixed(2);
+  return `<path class="ce-cam-side" d="M${hull.map(P2).join("L")}Z"/><path class="ce-cam" d="M${front.map(M).join("L")}Z"/>`;
 }
 function camshafts() {
-  return ["intake", "exhaust"].map((w) => S_(G.disc(BELT_Y + 3, 6, 2.4, CAMAX[w], P), { tone: "hi", crease: "none" }) + S_(G.disc(6, 7.4, 3.2, CAMAX[w], P), { tone: "mid" })).join("");
+  // The shaft behind the lobe; the stub and collar in front come after it.
+  return ["intake", "exhaust"].map((w) => S_(G.disc(BELT_Y + 3, -CAM_W, 2.4, CAMAX[w], P), { tone: "hi", crease: "none" })).join("");
+}
+function camStubs() {
+  return ["intake", "exhaust"].map((w) => S_(G.disc(CAM_W, 6, 2.4, CAMAX[w], P), { tone: "hi", crease: "none" }) + S_(G.disc(6, 7.4, 3.2, CAMAX[w], P), { tone: "mid" })).join("");
 }
 
 // ---------------------------------------------------------------- assemble
@@ -378,6 +394,7 @@ const svg = k.figureSvg({
     `<g data-ce-valve-high="exhaust">${valveHigh(VX.exhaust)}</g>`,
     camshafts(),
     `<g data-ce-cams>${camLobe("intake", THETA0)}${camLobe("exhaust", THETA0)}</g>`,
+    camStubs(),
     sparkPlug(),
     upright(YU[1]),
   ],
@@ -458,6 +475,7 @@ const FIGURE_CSS = `
 .iso${R_} .ce-glass{fill:color-mix(in srgb,var(--anatomy-hi) 7%,transparent);stroke:var(--anatomy-mid);stroke-width:.8;pointer-events:none}
 .iso${R_} .ce-charge{fill:var(--ce-stroke,var(--ce-comp));opacity:var(--ce-fill,.18)}
 .iso${R_} .ce-cam{fill:var(--anatomy-top);stroke:var(--anatomy-hi);stroke-width:1;stroke-linejoin:round}
+.iso${R_} .ce-cam-side{fill:var(--anatomy-shade-0);stroke:var(--anatomy-hi);stroke-width:1;stroke-linejoin:round}
 .iso${R_} .ce-spark{fill:#fde68a;opacity:0;filter:blur(1.6px)}
 .iso${R_}[data-firing] .ce-spark{opacity:.95}
 @media (max-width:560px){.iso${R_} .iso-plate{padding:40px 4px 60px}.iso${R_} .iso-plate-corner[data-corner="hint"]{display:none}.iso${R_} .iso-plate-corner[data-corner="readout"]{font-size:10px}}
@@ -470,7 +488,7 @@ const P = ${JSON.stringify(P)};
 const MM = ${JSON.stringify(MM)}, EV = ${JSON.stringify(EV)}, STROKES = ${JSON.stringify(STROKES)};
 const S = ${S}, CR = ${CR}, CX = ${CX}, CZ = ${CZ}, PIN_TO_CROWN = ${PIN_TO_CROWN}, BORE_R = ${BORE_R};
 const HEAD_Z = ${HEAD_Z}, TOP_Z = ${TOP_Z}, STEM_TOP = ${STEM_TOP}, VX = ${JSON.stringify(VX)};
-const CAM_Z = ${CAM_Z}, CAM_BASE = ${CAM_BASE}, CAM_NOSE = ${CAM_NOSE}, BELT_Y = ${BELT_Y}, FLY = ${JSON.stringify(FLY)}, FLY_FACE = ${FLY_FACE};
+const CAM_Z = ${CAM_Z}, CAM_BASE = ${CAM_BASE}, CAM_NOSE = ${CAM_NOSE}, CAM_W = ${CAM_W}, BELT_Y = ${BELT_Y}, FLY = ${JSON.stringify(FLY)}, FLY_FACE = ${FLY_FACE};
 const THETA0 = ${THETA0}, VIEW_Y = ${view[1]};
 const view = [0, VIEW_Y, 0];
 const at = (p) => iso(p, P);

@@ -676,11 +676,11 @@ const ISO_CSS = `
 `;
 
 
-const P = {"origin":[290.33972054800785,405.49319397179823],"scale":1.5684280972763616,"azimuth":40,"elevation":30};
+const P = {"origin":[290.35529463419823,405.7197158978243],"scale":1.5658995126229094,"azimuth":40,"elevation":30};
 const MM = {"r":43,"l":143,"bore":86}, EV = {"intake":{"open":-10,"close":220,"lift":9},"exhaust":{"open":500,"close":730,"lift":9},"spark":345}, STROKES = ["Intake","Compression","Power","Exhaust"];
 const S = 0.4186046511627907, CR = 18, CX = 0, CZ = 62, PIN_TO_CROWN = 12, BORE_R = 18;
 const HEAD_Z = 157.86046511627907, TOP_Z = 175.86046511627907, STEM_TOP = 187.36046511627907, VX = {"intake":-9,"exhaust":9};
-const CAM_Z = 197.86046511627907, CAM_BASE = 6.5, CAM_NOSE = 3.7674418604651163, BELT_Y = -33, FLY = {"y0":-48,"y1":-41,"r":36}, FLY_FACE = -41;
+const CAM_Z = 198.36046511627907, CAM_BASE = 7, CAM_NOSE = 3.7674418604651163, CAM_W = 2.6, BELT_Y = -33, FLY = {"y0":-48,"y1":-41,"r":36}, FLY_FACE = -41;
 const THETA0 = 300, VIEW_Y = 0.6427876096865393;
 const view = [0, VIEW_Y, 0];
 const at = (p) => iso(p, P);
@@ -691,11 +691,15 @@ const xOf = (deg) => {
   return MM.r * Math.cos(t) + Math.sqrt(MM.l * MM.l - (MM.r * Math.sin(t)) ** 2);
 };
 const liftOf = (deg, ev) => {
-  // smooth sin² lift between the opening and closing angles, cycle 720°
-  let a = (((deg - ev.open) % 720) + 720) % 720;
+  // A tangent cam under a flat bucket: base circle, straight flanks and a
+  // nose circle. The bucket rides the cam's support function, so the lift at
+  // cam angle ψ from the nose is L (cos ψ − cos h) / (1 − cos h), where h is
+  // half the event in cam degrees (cam at half crank speed). Cycle 720°.
+  const a = (((deg - ev.open) % 720) + 720) % 720;
   const span = ev.close - ev.open;
   if (a > span) return 0;
-  return ev.lift * Math.sin((Math.PI * a) / span) ** 2;
+  const h = (span / 4) * (Math.PI / 180), psi = ((a - span / 2) / 2) * (Math.PI / 180);
+  return Math.max(0, (ev.lift * (Math.cos(psi) - Math.cos(h))) / (1 - Math.cos(h)));
 };
 const crownZ = (deg) => CZ + xOf(deg) * S + PIN_TO_CROWN;
 function spokes(deg) {
@@ -743,18 +747,24 @@ function camLobe(which, deg) {
   const ev = EV[which];
   const centre = (ev.open + ev.close) / 2;
   const phi = ((deg - centre) / 2) * (Math.PI / 180); // cam turns at half speed
+  const h = ((ev.close - ev.open) / 4) * (Math.PI / 180); // half the event, cam radians
+  const d = CAM_NOSE / (1 - Math.cos(h)), rn = CAM_BASE - d + CAM_NOSE;
   const cx = VX[which];
-  const pts = [];
-  for (let i = 0; i <= 48; i++) {
-    const u = (i / 48) * 2 * Math.PI;
-    // base circle plus a smooth nose of height CAM_NOSE pointing at angle 0 (down)
-    const halfWidth = ((ev.close - ev.open) / 2 / 2) * (Math.PI / 180); // half the event, in cam degrees
-    let d = Math.abs(((u + Math.PI) % (2 * Math.PI)) - Math.PI);
-    const r = CAM_BASE + (d < halfWidth ? CAM_NOSE * Math.cos((Math.PI / 2) * (d / halfWidth)) ** 2 : 0);
-    const ang = u + phi;
-    pts.push([cx + r * Math.sin(ang), 0, CAM_Z - r * Math.cos(ang)]);
-  }
-  return `<path class="ce-cam" d="M${pts.map(M).join("L")}Z"/>`;
+  const ring = [];
+  for (let i = 0; i <= 16; i++) ring.push([d, rn, -h + (2 * h * i) / 16]); // nose arc
+  for (let i = 0; i <= 40; i++) ring.push([0, CAM_BASE, h + ((2 * Math.PI - 2 * h) * i) / 40]); // base arc
+  const face = (y) => ring.map(([off, r, u]) => {
+    const a0 = phi, a1 = u + phi; // nose axis, then the point's direction
+    return [cx + off * Math.sin(a0) + r * Math.sin(a1), y, CAM_Z - off * Math.cos(a0) - r * Math.cos(a1)];
+  });
+  const front = face(CAM_W), back = face(-CAM_W);
+  // The lobe is convex, so its outline is the hull of both faces.
+  const pts = front.concat(back).map(at).sort((p, q) => p[0] - q[0] || p[1] - q[1]);
+  const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const half = (list) => { const out = []; for (const p of list) { while (out.length > 1 && cross(out[out.length - 2], out[out.length - 1], p) <= 0) out.pop(); out.push(p); } out.pop(); return out; };
+  const hull = half(pts).concat(half(pts.slice().reverse()));
+  const P2 = (q) => q[0].toFixed(2) + " " + q[1].toFixed(2);
+  return `<path class="ce-cam-side" d="M${hull.map(P2).join("L")}Z"/><path class="ce-cam" d="M${front.map(M).join("L")}Z"/>`;
 }
 const cylinderFill = (z0, h) => cylinder(CX, 0, BORE_R - 0.4, z0, h, P, 56).fill;
 const strokeOf = (deg) => STROKES[Math.floor((((deg % 720) + 720) % 720) / 180)];

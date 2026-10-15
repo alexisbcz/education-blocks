@@ -35,6 +35,7 @@ for (const root of document.querySelectorAll("[data-timeline]")) {
 
   const W = () => Math.max(320, svg.clientWidth);
   const L = 12, AXIS = 272;
+  const CAPTION = "font-mono text-[9px] tracking-wider";
 
   function draw() {
     const w = W();
@@ -46,7 +47,7 @@ for (const root of document.querySelectorAll("[data-timeline]")) {
     // Lanes.
     lanes.forEach((l) => {
       el("line", { x1: 0, x2: w, y1: laneY[l.key], y2: laneY[l.key], style: "stroke:currentColor;stroke-opacity:0.08" }, svg);
-      text(svg, 8, laneY[l.key] - 16, l.name.toUpperCase(), { class: "fill-muted-foreground font-mono text-[9px] tracking-wider" });
+      text(svg, 8, laneY[l.key] - 16, l.name.toUpperCase(), { class: "fill-muted-foreground " + CAPTION });
     });
 
     // Axis: nice steps in historical years (no year 0).
@@ -66,32 +67,97 @@ for (const root of document.querySelectorAll("[data-timeline]")) {
       text(svg, x(0.5) + 4, AXIS - 6, "BCE | CE");
     }
 
-    // Events: dots always, labels where there is room (greedy, per lane).
-    // The lane captions occupy the left of the "above" row.
-    const lastEnd = Object.fromEntries(lanes.map((l) => [l.key + ":a", 8 + l.name.length * 6.2 + 8]));
-    for (const e of order) {
+    // Events: dots always; labels by measured width in two rows per lane
+    // (below the line, then above it). A label starts at its dot, or ends
+    // at it near the right edge, and never covers another label. The
+    // selected event is placed first, then the most isolated ones, so dense
+    // clusters keep one label and a "+n" marker that zooms into them.
+    const LABEL = "font-sans text-[11px]";
+    const measure = el("text", { class: LABEL, visibility: "hidden" }, svg);
+    const widthOf = (str, bold, cls = bold ? LABEL + " font-medium" : LABEL) => {
+      const key = cls + "|" + str;
+      if (!widths.has(key)) {
+        measure.setAttribute("class", cls);
+        measure.textContent = str;
+        widths.set(key, measure.getComputedTextLength());
+      }
+      return widths.get(key);
+    };
+    const visible = order.filter((e) => { const cx = x(e.a); return cx >= -20 && cx <= w + 20; });
+    const used = {}; // row → occupied [x0, x1] intervals
+    const take = (row, x0, x1) => (used[row] ??= []).push([x0, x1]);
+    const free = (row, x0, x1) => x0 >= 2 && x1 <= w - 2 && !(used[row] ?? []).some(([a, b]) => x0 < b + 8 && x1 > a - 8);
+    // The lane captions sit at the left of each "above" row.
+    lanes.forEach((l) => take(l.key + ":a", 0, 8 + widthOf(l.name.toUpperCase(), false, CAPTION) + 4));
+    const rowY = { b: 20, a: -9 };
+    const placed = new Map();
+    const place = (e) => {
+      const cx = x(e.a), on = selected === e.i, tw = widthOf(e.title, on);
+      for (const side of ["b", "a"]) {
+        const row = e.lane + ":" + side;
+        for (const [x0, anchor] of [[cx - 4, "start"], [cx + 4 - tw, "end"]]) {
+          if (!free(row, x0, x0 + tw)) continue;
+          take(row, x0, x0 + tw);
+          placed.set(e.i, { x: anchor === "start" ? x0 : x0 + tw, y: laneY[e.lane] + rowY[side], anchor });
+          return true;
+        }
+      }
+      return false;
+    };
+    const gap = (e) => {
+      const lane = visible.filter((o) => o.lane === e.lane), k = lane.indexOf(e);
+      const l = k > 0 ? x(e.a) - x(lane[k - 1].a) : Infinity, r = k < lane.length - 1 ? x(lane[k + 1].a) - x(e.a) : Infinity;
+      return Math.min(l, r);
+    };
+    const sel = visible.find((e) => e.i === selected);
+    if (sel && !place(sel)) {
+      // The selected label always shows: in its own row, displacing others.
+      const cx = x(sel.a), tw = widthOf(sel.title, true), x0 = Math.max(2, Math.min(cx - 4, w - 2 - tw));
+      take(sel.lane + ":b", x0, x0 + tw);
+      placed.set(sel.i, { x: x0, y: laneY[sel.lane] + rowY.b, anchor: "start" });
+    }
+    visible.filter((e) => e !== sel).sort((p, q) => gap(q) - gap(p)).forEach(place);
+
+    for (const e of visible) {
       const cx = x(e.a), cy = laneY[e.lane];
-      if (cx < -20 || cx > w + 20) continue;
       const on = selected === e.i;
       const g = el("g", { "data-i": e.i, class: "cursor-pointer" }, svg);
       el("circle", { cx, cy, r: 11, style: "fill:transparent" }, g);
       if (on) el("circle", { cx, cy, r: 9, style: "fill:none;stroke:var(--brand);stroke-width:2" }, g);
       el("circle", { cx, cy, r: on ? 5.5 : 4.5, style: `fill:${laneColor[e.lane]};stroke:var(--code-bg);stroke-width:1.5` }, g);
-      // Labels go where they fit, below the lane or else above it, never
-      // over a neighbour (the selected event's label always shows).
-      const width = e.title.length * 5.9 + 10;
-      const lx = Math.max(2, Math.min(cx - 4, w - width));
-      const cls = on ? "fill-foreground font-sans text-[11px] font-medium" : "fill-muted-foreground font-sans text-[11px]";
-      const below = e.lane + ":b", above = e.lane + ":a";
-      if (on || lx > (lastEnd[below] ?? -Infinity)) {
-        text(g, lx, cy + 20, e.title, { class: cls });
-        lastEnd[below] = Math.max(lastEnd[below] ?? -Infinity, lx + width);
-      } else if (lx > (lastEnd[above] ?? -Infinity)) {
-        text(g, lx, cy - 9, e.title, { class: cls });
-        lastEnd[above] = lx + width;
+      const p = placed.get(e.i);
+      if (p) text(g, p.x, p.y, e.title, { "text-anchor": p.anchor, class: on ? `fill-foreground ${LABEL} font-medium` : `fill-muted-foreground ${LABEL}` });
+    }
+
+    // Unlabelled events, grouped by lane where their dots sit close
+    // together, get a "+n" marker; clicking it zooms to fit the group.
+    for (const l of lanes) {
+      const hidden = visible.filter((e) => e.lane === l.key && !placed.has(e.i));
+      const groups = [];
+      for (const e of hidden) {
+        const last = groups.at(-1);
+        if (last && x(e.a) - x(last.at(-1).a) < 48) last.push(e);
+        else groups.push([e]);
+      }
+      for (const grp of groups) {
+        const mid = (x(grp[0].a) + x(grp.at(-1).a)) / 2, str = `+${grp.length}`, tw = widthOf(str) + 10;
+        for (const side of ["b", "a"]) {
+          const row = l.key + ":" + side, x0 = mid - tw / 2;
+          if (!free(row, x0, x0 + tw)) continue;
+          take(row, x0, x0 + tw);
+          const y = laneY[l.key] + rowY[side];
+          const span = Math.max(12, grp.at(-1).a - grp[0].a);
+          const m = el("g", { "data-zoomto": `${grp[0].a - span * 0.6},${grp.at(-1).a + span * 0.6}`, class: "cursor-zoom-in" }, svg);
+          el("title", {}, m).textContent = grp.map((e) => `${e.label}: ${e.title}`).join("\n");
+          el("rect", { x: x0, y: y - 11, width: tw, height: 15, rx: 7.5, style: `fill:var(--background);stroke:${laneColor[l.key]};stroke-opacity:0.6` }, m);
+          text(m, mid, y, str, { "text-anchor": "middle", class: "fill-muted-foreground font-mono text-[10px]" });
+          break;
+        }
       }
     }
   }
+  const widths = new Map();
+  document.fonts?.ready.then(() => { widths.clear(); draw(); });
 
   function select(i, { reveal = false } = {}) {
     selected = i;
@@ -158,7 +224,10 @@ for (const root of document.querySelectorAll("[data-timeline]")) {
     const wasClick = drag && !drag.moved;
     drag = null;
     if (!wasClick) return;
-    const hit = document.elementFromPoint(e.clientX, e.clientY)?.closest("[data-i]");
+    const target = document.elementFromPoint(e.clientX, e.clientY);
+    const cluster = target?.closest("[data-zoomto]");
+    if (cluster) return setView(cluster.dataset.zoomto.split(",").map(Number));
+    const hit = target?.closest("[data-i]");
     if (hit) select(Number(hit.dataset.i));
   });
   // Ctrl/⌘ + wheel (and trackpad pinch) zooms around the pointer; plain

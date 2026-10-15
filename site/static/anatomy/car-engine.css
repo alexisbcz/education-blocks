@@ -123,6 +123,7 @@
 .iso[data-anatomy="car-engine"] .ce-glass{fill:color-mix(in srgb,var(--anatomy-hi) 7%,transparent);stroke:var(--anatomy-mid);stroke-width:.8;pointer-events:none}
 .iso[data-anatomy="car-engine"] .ce-charge{fill:var(--ce-stroke,var(--ce-comp));opacity:var(--ce-fill,.18)}
 .iso[data-anatomy="car-engine"] .ce-cam{fill:var(--anatomy-top);stroke:var(--anatomy-hi);stroke-width:1;stroke-linejoin:round}
+.iso[data-anatomy="car-engine"] .ce-cam-side{fill:var(--anatomy-shade-0);stroke:var(--anatomy-hi);stroke-width:1;stroke-linejoin:round}
 .iso[data-anatomy="car-engine"] .ce-spark{fill:#fde68a;opacity:0;filter:blur(1.6px)}
 .iso[data-anatomy="car-engine"][data-firing] .ce-spark{opacity:.95}
 @media (max-width:560px){.iso[data-anatomy="car-engine"] .iso-plate{padding:40px 4px 60px}.iso[data-anatomy="car-engine"] .iso-plate-corner[data-corner="hint"]{display:none}.iso[data-anatomy="car-engine"] .iso-plate-corner[data-corner="readout"]{font-size:10px}}
