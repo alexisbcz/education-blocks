@@ -18,14 +18,14 @@ var areas = []struct {
 	name  string
 	slugs []string
 }{
-	{"Mathematics", []string{"linalg", "calculus", "geometry", "probability", "stats", "discrete", "crypto", "logic", "complex", "algebra", "chaos", "optimization", "methods"}},
-	{"Computing", []string{"ml", "algorithms", "arch", "graphics", "networking", "plt", "os", "databases", "infotheory", "qcomputing", "security", "dataviz", "a11y", "games", "llm"}},
+	{"Mathematics", []string{"linalg", "calculus", "geometry", "probability", "stats", "discrete", "crypto", "logic", "complex", "algebra", "chaos", "optimization", "methods", "numtheory"}},
+	{"Computing", []string{"ml", "algorithms", "arch", "graphics", "networking", "plt", "os", "databases", "infotheory", "qcomputing", "security", "dataviz", "a11y", "games", "llm", "distsys"}},
 	{"Physical sciences", []string{"physics", "quantum", "thermo", "em", "optics", "nuclear", "fluids", "chemistry", "astronomy"}},
-	{"Engineering", []string{"automotive", "rocketry", "materials", "signals", "control", "energy", "aerospace", "civil", "electronics", "audio", "mechanical"}},
+	{"Engineering", []string{"automotive", "rocketry", "materials", "signals", "control", "energy", "aerospace", "civil", "electronics", "audio", "mechanical", "robotics"}},
 	{"Earth & life sciences", []string{"geology", "climate", "biology", "genetics", "physiology", "pharmacology", "neuro", "epidemiology", "ecology", "paleo", "food", "sports", "agriculture", "imaging", "hydrology"}},
 	{"Platform", []string{"platform"}},
 	{"Thinking & writing tools", []string{"argumentation", "languages", "novel", "learning", "media"}},
-	{"Society & humanities", []string{"history", "sociology", "economics", "geography", "psychology", "philosophy", "linguistics", "music", "finance", "politics", "design", "film", "archaeology", "transport", "behavioral"}},
+	{"Society & humanities", []string{"history", "sociology", "economics", "geography", "psychology", "philosophy", "linguistics", "music", "finance", "politics", "design", "film", "archaeology", "transport", "behavioral", "law"}},
 }
 
 type areaGroup struct {

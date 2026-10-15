@@ -470,15 +470,17 @@ for (const root of document.querySelectorAll("[data-mech-spring]")) {
 
     // force–deflection
     const xmax = Math.max(travel * (mode === "series" ? 2 : 1), x) * 1.1;
-    const f = frame(svg, { box: [290, 24, 250, 250], x: [0, xmax], y: [0, Math.max(F, kset * xmax) * 1.05], xticks: [0, Math.round(xmax / 2), Math.round(xmax)], yticks: [0, Math.round(F)], xfmt: (v) => sig(v, 2), yfmt: (v) => sig(v, 3), xlabel: "deflection (mm)" });
+    const ytop = Math.max(F, kset * xmax) * 1.05;
+    const f = frame(svg, { box: [290, 24, 250, 250], x: [0, xmax], y: [0, ytop], xticks: [0, Math.round(xmax / 2), Math.round(xmax)], yticks: [0, Math.round(F)], xfmt: (v) => sig(v, 2), yfmt: (v) => sig(v, 3), xlabel: "deflection (mm)" });
     text(svg, f.L, f.T - 8, "force (N)", {});
-    polyline(svg, [[f.sx(0), f.sy(0)], [f.sx(xmax), f.sy(k * xmax)]], "stroke:var(--muted-foreground);stroke-width:1.2;stroke-dasharray:4 4");
+    const xk = Math.min(xmax, ytop / k);
+    polyline(svg, [[f.sx(0), f.sy(0)], [f.sx(xk), f.sy(k * xk)]], "stroke:var(--muted-foreground);stroke-width:1.2;stroke-dasharray:4 4");
     polyline(svg, [[f.sx(0), f.sy(0)], [f.sx(xmax), f.sy(kset * xmax)]], "stroke:var(--brand);stroke-width:2");
     const solidX = travel * (mode === "series" ? 2 : 1);
     el("line", { x1: f.sx(solidX), x2: f.sx(solidX), y1: f.T, y2: f.T + f.H, style: "stroke:var(--foreground);stroke-opacity:0.35;stroke-dasharray:2 3" }, svg);
     text(svg, f.sx(solidX) - 4, f.T + 10, "solid", { "text-anchor": "end" });
     el("circle", { cx: f.sx(Math.min(x, xmax)), cy: f.sy(F), r: 4.5, style: "fill:var(--brand);stroke:var(--background);stroke-width:1.5" }, svg);
-    if (mode !== "one") text(svg, f.sx(xmax) - 4, f.sy(k * xmax) + (mode === "series" ? -8 : 14), "one spring", { "text-anchor": "end" });
+    if (mode !== "one") text(svg, f.sx(xk) - 6, f.sy(k * xk) + (mode === "series" ? 12 : 14), "one spring", { "text-anchor": "end" });
 
     o.c.textContent = `${num(C, 1)}${C < 4 ? " (hard to coil)" : C > 12 ? " (prone to buckle/tangle)" : ""}`;
     o.k.textContent = `${sig(k)} N/mm`;
@@ -539,7 +541,7 @@ for (const root of document.querySelectorAll("[data-mech-belt]")) {
     polyline(svg, curve(mu), vbelt ? "stroke:var(--muted-foreground);stroke-width:1.2;stroke-dasharray:4 4" : "stroke:var(--brand);stroke-width:2");
     polyline(svg, curve(mu / Math.sin(GROOVE / 2)), vbelt ? "stroke:var(--brand);stroke-width:2" : "stroke:var(--muted-foreground);stroke-width:1.2;stroke-dasharray:4 4");
     if (ratio <= Math.min(ymax, 60) * 1.05) el("circle", { cx: f.sx(s.theta.get()), cy: f.sy(ratio), r: 4.5, style: "fill:var(--brand);stroke:var(--background);stroke-width:1.5" }, svg);
-    text(svg, f.L + 8, 26, vbelt ? "dashed: flat belt" : "dashed: V-belt, 40° groove", {});
+    text(svg, f.sx(290), 26, vbelt ? "dashed: flat belt" : "dashed: V-belt, 40° groove", {});
 
     o.ratio.textContent = `${num(ratio, 3)}${vbelt ? ` (μ′ = ${num(me, 3)})` : ""}`;
     o.T2.textContent = `${sig(T2)} N`;

@@ -351,18 +351,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive accessibility course",
 			Lede:   "Web accessibility with working demos, each tied to its WCAG 2.2 success criteria: the accessibility tree computed from the DOM, focus order and keyboard traps, a page read the way a screen reader reads it, a headings checker, the W3C alt decision tree, target sizes, labelled forms with announced errors, ARIA patterns that follow the Authoring Practices Guide, colour as the only cue, and motion and media.",
 			Blocks: A11yBlocks},
-		{Slug: "games", Name: "Game Design & Game AI", Path: "/games",
-			Title:  "The blocks of an interactive game design and game AI course",
-			Lede:   "How games think and how they feel: a perfect tic-tac-toe player with its search counted, Connect Four on a time budget, Monte Carlo tree search, Perlin-noise worlds and wave function collapse, a platformer with and without the tricks of game feel, a guard's state machine, steering and flocking, collision tests and the exact odds behind loot drops.",
-			Blocks: GamesBlocks},
 		{Slug: "mechanical", Name: "Mechanical Engineering", Path: "/mechanical",
 			Title:  "The blocks of an interactive mechanical engineering course",
 			Lede:   "Machine elements you can turn by hand: a planetary gear train on a demo stand with the Willis equation, involute spur gears, a cam bench whose profile is cut from its motion law, four motion laws with jerk, the four-bar linkage and Grashof's condition, rolling bearing life, coil springs, belt friction, shafts in torsion and flywheel sizing.",
 			Blocks: MechanicalBlocks},
-		{Slug: "llm", Name: "Large Language Models", Path: "/llm",
-			Title:  "The blocks of an interactive course on large language models",
-			Lede:   "How language models work, by building tiny ones in the browser: a BPE tokenizer trained on your text, a character n-gram model with exact perplexity, word vectors from co-occurrence and SVD, attention with every matrix shown, positional encodings, a small neural model trained by backprop, decoding with temperature, top-k and top-p, the memory cost of long contexts, and how base models become assistants. Toy scale throughout.",
-			Blocks: LlmBlocks},
 	}
 }
 
