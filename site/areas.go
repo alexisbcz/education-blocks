@@ -21,7 +21,7 @@ var areas = []struct {
 	{"Mathematics", []string{"linalg", "calculus", "geometry", "probability", "stats", "discrete", "crypto", "logic", "complex", "algebra", "chaos", "optimization", "methods", "numtheory", "topology"}},
 	{"Computing", []string{"ml", "algorithms", "arch", "graphics", "networking", "plt", "os", "databases", "infotheory", "qcomputing", "security", "dataviz", "a11y", "games", "llm", "distsys", "toc", "vision", "ledger"}},
 	{"Physical sciences", []string{"physics", "quantum", "thermo", "em", "optics", "nuclear", "fluids", "chemistry", "astronomy", "astro"}},
-	{"Engineering", []string{"automotive", "rocketry", "materials", "signals", "control", "energy", "aerospace", "civil", "electronics", "audio", "mechanical", "robotics"}},
+	{"Engineering", []string{"automotive", "rocketry", "materials", "signals", "control", "energy", "aerospace", "civil", "electronics", "audio", "mechanical", "robotics", "semi"}},
 	{"Earth & life sciences", []string{"geology", "climate", "biology", "genetics", "physiology", "pharmacology", "neuro", "epidemiology", "ecology", "paleo", "food", "sports", "agriculture", "imaging", "hydrology", "ocean", "immuno", "weather", "biochem"}},
 	{"Platform", []string{"platform", "assess"}},
 	{"Thinking & writing tools", []string{"argumentation", "languages", "novel", "learning", "media"}},
