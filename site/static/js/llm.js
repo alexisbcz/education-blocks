@@ -221,7 +221,7 @@ for (const root of document.querySelectorAll("[data-llm-ngram]")) {
     const top = p.map((v, i) => [v, i]).sort((a, b) => b[0] - a[0]).slice(0, 16);
     svg.replaceChildren();
     const max = Math.max(0.05, top[0][0]);
-    const f = frame(svg, { box: [40, 14, 506, 170], x: [0, 16], y: [0, max], yticks: [0, max / 2, max].map((v) => +v.toFixed(2)), ylabel: "P(next | context)" });
+    const f = frame(svg, { box: [40, 26, 506, 158], x: [0, 16], y: [0, max * 1.15], yticks: [0, max / 2, max].map((v) => +v.toFixed(2)), ylabel: "P(next | context)" });
     top.forEach(([v, i], r) => {
       const x = f.sx(r) + 3, w = f.sx(1) - f.sx(0) - 6;
       el("rect", { x, y: f.sy(v), width: w, height: Math.max(0, f.sy(0) - f.sy(v)), rx: 2, style: `fill:var(--brand);fill-opacity:${r === 0 ? 0.9 : 0.55}` }, svg);
@@ -275,8 +275,13 @@ const EMBED_TEMPLATES = {
 const EMBED_EXTRA = [
   "the king is a man", "the queen is a woman", "the prince is a young man", "the princess is a young woman",
   "the man rules the kingdom", "the woman rules the kingdom", "the dog eats meat", "the cat eats meat",
+  "the king and the queen dance", "the prince and the princess dance", "the prince rides a horse",
+  "the horse pulls a cart", "the cow gives milk", "cheese is made from milk", "she eats bread with cheese",
+  "the cat chases a mouse", "the dog chases the cat", "rome and paris have old churches", "london has rain",
+  "berlin has a long wall", "the apple grows on a tree", "soup with bread", "the king travels to rome",
+  "the queen lives in london", "the dog sleeps by the fire", "the man eats an apple", "the woman eats soup",
 ];
-const STOP = new Set("the a is in at and for by on of to we she".split(" "));
+const STOP = new Set("the a an is in at and for by on of to we she with from".split(" "));
 
 function embedCorpus() {
   const out = [];
@@ -301,32 +306,39 @@ function ppmi(sentences, window) {
   return { vocab, M };
 }
 
-// Top-k eigenvectors of the symmetric PPMI matrix by power iteration with
-// deflation; for a symmetric matrix these are its singular vectors and
-// |eigenvalue| its singular values.
-function topEigen(M, k, rng) {
-  const V = M.length;
+// The PPMI matrix is symmetric, so its singular vectors are its
+// eigenvectors and its singular values the |eigenvalues|. Cyclic Jacobi
+// rotations diagonalise it exactly (to rounding) at this size.
+function topEigen(M, k) {
+  const n = M.length;
   const A = M.map((r) => Float64Array.from(r));
-  const vecs = [], vals = [];
-  for (let c = 0; c < k; c++) {
-    let v = Float64Array.from({ length: V }, () => gauss(rng));
-    let lambda = 0;
-    for (let it = 0; it < 500; it++) {
-      // Iterate with A² so negative eigenvalues of large magnitude converge too.
-      const w = mat(A, mat(A, v));
-      const norm = Math.hypot(...w);
-      if (norm < 1e-12) break;
-      const nv = w.map((x) => x / norm);
-      const diff = Math.hypot(...nv.map((x, i) => x - v[i]));
-      v = nv;
-      if (diff < 1e-10) break;
-    }
-    const Av = mat(A, v);
-    lambda = v.reduce((a, x, i) => a + x * Av[i], 0);
-    vecs.push(v); vals.push(lambda);
-    for (let i = 0; i < V; i++) for (let j = 0; j < V; j++) A[i][j] -= lambda * v[i] * v[j];
+  const Q = Array.from({ length: n }, (_, i) => Float64Array.from({ length: n }, (_, j) => +(i === j)));
+  for (let sweep = 0; sweep < 60; sweep++) {
+    let off = 0;
+    for (let p = 0; p < n; p++) for (let q = p + 1; q < n; q++) off += A[p][q] * A[p][q];
+    if (off < 1e-22) break;
+    for (let p = 0; p < n; p++)
+      for (let q = p + 1; q < n; q++) {
+        if (Math.abs(A[p][q]) < 1e-15) continue;
+        const theta = (A[q][q] - A[p][p]) / (2 * A[p][q]);
+        const t = Math.sign(theta || 1) / (Math.abs(theta) + Math.sqrt(theta * theta + 1));
+        const c = 1 / Math.sqrt(t * t + 1), s = t * c;
+        for (let r = 0; r < n; r++) {
+          const ap = A[r][p], aq = A[r][q];
+          A[r][p] = c * ap - s * aq; A[r][q] = s * ap + c * aq;
+        }
+        for (let r = 0; r < n; r++) {
+          const ap = A[p][r], aq = A[q][r];
+          A[p][r] = c * ap - s * aq; A[q][r] = s * ap + c * aq;
+        }
+        for (let r = 0; r < n; r++) {
+          const qp = Q[r][p], qq = Q[r][q];
+          Q[r][p] = c * qp - s * qq; Q[r][q] = s * qp + c * qq;
+        }
+      }
   }
-  return { vecs, vals };
+  const order = [...Array(n).keys()].sort((a, b) => Math.abs(A[b][b]) - Math.abs(A[a][a])).slice(0, k);
+  return { vecs: order.map((c) => Float64Array.from(Q, (r) => r[c])), vals: order.map((c) => A[c][c]) };
 }
 const mat = (A, v) => Float64Array.from(A, (r) => r.reduce((a, x, j) => a + x * v[j], 0));
 const cosine = (a, b) => {
@@ -341,7 +353,8 @@ for (const root of document.querySelectorAll("[data-llm-embed]")) {
   const o = outs(root);
   const sentences = embedCorpus();
   const groupOf = new Map(Object.entries(EMBED_GROUPS).flatMap(([g, ws]) => ws.map((w) => [w, g])));
-  const colors = { animal: "var(--vec-u)", royal: "var(--brand)", food: "var(--ion-na)", city: "var(--ion-k)" };
+  groupOf.set("man", "person").set("woman", "person");
+  const colors = { animal: "var(--vec-u)", royal: "var(--brand)", food: "var(--ion-na)", city: "var(--ion-k)", person: "var(--foreground)" };
   let selected = "king", emb = null, vocab = [];
   const s = scrubAll(root, update);
 
@@ -349,7 +362,7 @@ for (const root of document.querySelectorAll("[data-llm-embed]")) {
     const { vocab: vs, M } = ppmi(sentences, s.window.get());
     vocab = vs;
     const k = Math.min(s.dims.get(), vs.length);
-    const { vecs, vals } = topEigen(M, k, mulberry32(7));
+    const { vecs, vals } = topEigen(M, k);
     emb = vs.map((_, i) => vecs.map((v, c) => v[i] * Math.sqrt(Math.abs(vals[c]))));
     const fro = M.reduce((a, r) => a + r.reduce((b, x) => b + x * x, 0), 0);
     o.vocab.textContent = vs.length + " words";
@@ -363,14 +376,25 @@ for (const root of document.querySelectorAll("[data-llm-embed]")) {
     const pad = (lo, hi) => { const d = (hi - lo) * 0.12 || 1; return [lo - d, hi + d]; };
     const f = frame(svg, { box: [16, 12, 528, 336], x: pad(Math.min(...xs), Math.max(...xs)), y: pad(Math.min(...ys), Math.max(...ys)), xlabel: "dimension 1", ylabel: "dimension 2" });
     const near = neighbours(selected).slice(0, 5).map(([w]) => w);
-    vocab.forEach((w, i) => {
+    const placed = [];
+    const order = [...vocab.keys()].sort((a, b) => +groupOf.has(vocab[a]) - +groupOf.has(vocab[b]));
+    order.forEach((i) => {
+      const w = vocab[i];
       const g = groupOf.get(w);
       const x = f.sx(xs[i]), y = f.sy(ys[i]);
       const on = w === selected, hi = near.includes(w);
       const grp = el("g", { role: "button", tabindex: "0", "aria-label": w, class: "cursor-pointer outline-none" }, svg);
       if (hi) el("line", { x1: f.sx(xs[vocab.indexOf(selected)]), y1: f.sy(ys[vocab.indexOf(selected)]), x2: x, y2: y, style: "stroke:var(--brand);stroke-opacity:0.35" }, grp);
       el("circle", { cx: x, cy: y, r: on ? 6 : g ? 4.5 : 2.5, style: `fill:${g ? colors[g] : "currentColor"};fill-opacity:${g ? 0.9 : 0.3};stroke:var(--background);stroke-width:1.5` }, grp);
-      text(grp, x + 7, y + 4, w, { class: `font-mono ${g || on || hi ? "fill-foreground text-[11px]" : "fill-muted-foreground text-[9px]"}${on ? " font-semibold" : ""}` });
+      if (!g) { el("title", {}, grp).textContent = w; return; }
+      // Nudge labels that would overlap one already placed.
+      const lw = w.length * 6.6 + 2;
+      const spots = [[7, 4], [-7 - lw, 4], [7, 15], [7, -7], [-7 - lw, 15], [-7 - lw, -7], [-lw / 2, 18], [-lw / 2, -10]];
+      const free = ([dx, dy]) => !placed.some((b) => x + dx < b.x + b.w && b.x < x + dx + lw && Math.abs(b.y - (y + dy)) < 11);
+      const [dx, dy] = spots.find(free) ?? spots[0];
+      placed.push({ x: x + dx, y: y + dy, w: lw });
+      text(grp, x + dx, y + dy, w, { class: `font-mono fill-foreground text-[11px]${on ? " font-semibold" : ""}` });
+      if (!g) { grp.removeAttribute("role"); grp.removeAttribute("tabindex"); grp.removeAttribute("aria-label"); grp.classList.remove("cursor-pointer"); return; }
       const pick = () => { selected = w; plot(); };
       grp.addEventListener("click", pick);
       grp.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } });
@@ -394,7 +418,9 @@ for (const root of document.querySelectorAll("[data-llm-embed]")) {
 
   function neighbours(w) {
     const i = vocab.indexOf(w);
-    return vocab.map((v, j) => [v, cosine(emb[i], emb[j])]).filter(([v]) => v !== w).sort((a, b) => b[1] - a[1]);
+    // Compared among the labelled words only: the other words are mostly
+    // the contexts themselves.
+    return vocab.map((v, j) => [v, cosine(emb[i], emb[j])]).filter(([v]) => v !== w && groupOf.has(v)).sort((a, b) => b[1] - a[1]);
   }
   update();
 }
@@ -451,7 +477,7 @@ function matrixTable(name, M, { rows = ATTN_TOKENS, cols, heat = false, note } =
     body.append(tr);
   });
   t.append(body);
-  wrap.append(t);
+  wrap.append(cap, t);
   return wrap;
 }
 
@@ -572,7 +598,7 @@ for (const root of document.querySelectorAll("[data-llm-pe]")) {
 
 const CTX = 3, EMB = 8;
 
-function tinyNet(V, H, rng) {
+export function tinyNet(V, H, rng) {
   const p = (n, sc) => Float64Array.from({ length: n }, () => gauss(rng) * sc);
   const I = CTX * EMB;
   const net = { V, H, C: p(V * EMB, 1), W1: p(I * H, 1 / Math.sqrt(I)), b1: new Float64Array(H), W2: p(H * V, 1 / Math.sqrt(H) * 0.5), b2: new Float64Array(V) };
@@ -584,7 +610,7 @@ function tinyNet(V, H, rng) {
 }
 
 // Forward pass for one example: returns hidden activations and probabilities.
-function forward(net, ctx) {
+export function forward(net, ctx) {
   const { V, H, C, W1, b1, W2, b2 } = net;
   const I = CTX * EMB;
   const x = new Float64Array(I);
@@ -610,7 +636,7 @@ function forward(net, ctx) {
 }
 
 // One Adam step on a minibatch; returns the mean cross-entropy.
-function trainStep(net, data, batch, lr, rng) {
+export function trainStep(net, data, batch, lr, rng, wd = 0) {
   const { V, H, W1, W2 } = net;
   const I = CTX * EMB;
   const g = Object.fromEntries(net.keys.map((k) => [k, new Float64Array(net[k].length)]));
@@ -642,13 +668,13 @@ function trainStep(net, data, batch, lr, rng) {
       const gi = gr[i] / batch;
       m[i] = b1 * m[i] + (1 - b1) * gi;
       v[i] = b2 * v[i] + (1 - b2) * gi * gi;
-      w[i] -= (lr * (m[i] / (1 - b1 ** net.t))) / (Math.sqrt(v[i] / (1 - b2 ** net.t)) + eps);
+      w[i] -= (lr * (m[i] / (1 - b1 ** net.t))) / (Math.sqrt(v[i] / (1 - b2 ** net.t)) + eps) + lr * wd * w[i];
     }
   }
   return loss / batch;
 }
 
-const meanLoss = (net, data) => data.reduce((a, [c, y]) => a - Math.log(forward(net, c).p[y] + 1e-12), 0) / data.length;
+export const meanLoss = (net, data) => data.reduce((a, [c, y]) => a - Math.log(forward(net, c).p[y] + 1e-12), 0) / data.length;
 
 for (const root of document.querySelectorAll("[data-llm-tiny]")) {
   const corpus = charText(corpusOf(root));
@@ -674,7 +700,7 @@ for (const root of document.querySelectorAll("[data-llm-tiny]")) {
   const run = loop(root, () => {
     const t0 = performance.now();
     while (performance.now() - t0 < 10) {
-      const l = trainStep(net, train, 32, s.lr.get(), rng);
+      const l = trainStep(net, train, 32, s.lr.get(), rng, s.wd.get());
       ema = ema === null ? l : 0.95 * ema + 0.05 * l;
       steps++;
       if (steps % 50 === 0) hist.push([steps, ema, steps % 200 === 0 ? meanLoss(net, val) : null]);
@@ -716,6 +742,11 @@ for (const root of document.querySelectorAll("[data-llm-tiny]")) {
     polyline(svg, vals.map(([x, , y]) => [f.sx(x), f.sy(y)]), "stroke:var(--brand);stroke-width:1.75;stroke-dasharray:5 3");
     text(svg, 60, 196, "— train (smoothed)", { class: "fill-foreground font-mono text-[10px]" });
     text(svg, 190, 196, "- - validation", { class: "fill-brand font-mono text-[10px]" });
+    const best = vals.reduce((m, r) => (r[2] < m[2] ? r : m), vals[0]);
+    if (vals.at(-1)[2] > best[2] + 0.15) {
+      el("circle", { cx: f.sx(best[0]), cy: f.sy(best[2]), r: 3.5, style: "fill:var(--brand)" }, svg);
+      text(svg, 300, 196, `overfitting: best validation at step ${fmtBig(best[0])}`, { class: "fill-foreground font-mono text-[10px]" });
+    }
   }
 
   function sample() {
@@ -800,7 +831,10 @@ for (const root of document.querySelectorAll("[data-llm-sampling]")) {
       el("rect", { x: f.sx(0), y: y + 3, width: f.sx(d.base[i]) - f.sx(0), height: bh - 6, rx: 2, style: "fill:currentColor;fill-opacity:0.12" }, svg);
       if (kept) el("rect", { x: f.sx(0), y: y + 6, width: Math.max(1, f.sx(d.final[i]) - f.sx(0)), height: bh - 12, rx: 2, style: "fill:var(--brand);fill-opacity:0.85" }, svg);
       const label = kept ? (d.final[i] * 100).toFixed(1) + "%" : "cut";
-      text(svg, Math.min(f.sx(Math.max(d.final[i], d.base[i])) + 4, 520), y + bh / 2 + 4, label + (tally ? `  · ${tally[i]}/1000` : ""));
+      const end = f.sx(Math.max(d.final[i], d.base[i]));
+      const full = label + (tally ? `  · ${tally[i]}/1000` : "");
+      if (end > 440) text(svg, end - 6, y + bh / 2 + 4, full, { "text-anchor": "end", style: "fill:var(--background)" });
+      else text(svg, end + 4, y + bh / 2 + 4, full);
     });
     text(svg, 96, 254, "grey: after temperature · colour: what is sampled from", {});
     o.kept.textContent = `${d.keep.length} of ${CANDIDATES.length}`;
@@ -845,10 +879,14 @@ for (const root of document.querySelectorAll("[data-llm-cost]")) {
     polyline(svg, [[f.sx(0), f.sy(0)], [f.sx(nMax), f.sy(gb(kvTok * nMax * B))]], "stroke:var(--brand);stroke-width:2");
     // Attention cost ∝ n², scaled so it meets the KV line at the chosen n.
     const pts = [];
-    for (let i = 0; i <= 60; i++) { const x = (nMax * i) / 60; pts.push([f.sx(x), f.sy(Math.min(yMax, (gb(kv) * (x / n) ** 2)))]); }
+    for (let i = 0; i <= 120; i++) {
+      const x = (nMax * i) / 120, y = gb(kv) * (x / n) ** 2;
+      if (y > yMax) break;
+      pts.push([f.sx(x), f.sy(y)]);
+    }
     polyline(svg, pts, "stroke:var(--vec-u);stroke-width:1.5;stroke-dasharray:2 3");
     el("circle", { cx: f.sx(n), cy: f.sy(gb(kv)), r: 4.5, style: "fill:var(--brand);stroke:var(--background);stroke-width:1.5" }, svg);
-    text(svg, f.sx(n) + 7, f.sy(gb(kv)) - 6, `KV ${fmtBytes(kv)}`, { class: "fill-foreground font-mono text-[10px]" });
+    text(svg, f.sx(n) + 8, f.sy(gb(kv)) + 16, `KV ${fmtBytes(kv)}`, { class: "fill-foreground font-mono text-[10px]" });
     text(svg, 60, 290, "— KV cache (linear in n)", { class: "fill-brand font-mono text-[10px]" });
     text(svg, 230, 290, "··· attention compute (∝ n², relative)", { style: "fill:var(--vec-u)" });
   }

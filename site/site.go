@@ -359,6 +359,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive mechanical engineering course",
 			Lede:   "Machine elements you can turn by hand: a planetary gear train on a demo stand with the Willis equation, involute spur gears, a cam bench whose profile is cut from its motion law, four motion laws with jerk, the four-bar linkage and Grashof's condition, rolling bearing life, coil springs, belt friction, shafts in torsion and flywheel sizing.",
 			Blocks: MechanicalBlocks},
+		{Slug: "llm", Name: "Large Language Models", Path: "/llm",
+			Title:  "The blocks of an interactive course on large language models",
+			Lede:   "How language models work, by building tiny ones in the browser: a BPE tokenizer trained on your text, a character n-gram model with exact perplexity, word vectors from co-occurrence and SVD, attention with every matrix shown, positional encodings, a small neural model trained by backprop, decoding with temperature, top-k and top-p, the memory cost of long contexts, and how base models become assistants. Toy scale throughout.",
+			Blocks: LlmBlocks},
 	}
 }
 

@@ -18,7 +18,7 @@ var areas = []struct {
 	name  string
 	slugs []string
 }{
-	{"Mathematics", []string{"linalg", "calculus", "geometry", "probability", "stats", "discrete", "crypto", "logic", "complex", "algebra", "chaos", "optimization", "methods", "numtheory"}},
+	{"Mathematics", []string{"linalg", "calculus", "geometry", "probability", "stats", "discrete", "crypto", "logic", "complex", "algebra", "chaos", "optimization", "methods", "numtheory", "topology"}},
 	{"Computing", []string{"ml", "algorithms", "arch", "graphics", "networking", "plt", "os", "databases", "infotheory", "qcomputing", "security", "dataviz", "a11y", "games", "llm", "distsys"}},
 	{"Physical sciences", []string{"physics", "quantum", "thermo", "em", "optics", "nuclear", "fluids", "chemistry", "astronomy"}},
 	{"Engineering", []string{"automotive", "rocketry", "materials", "signals", "control", "energy", "aerospace", "civil", "electronics", "audio", "mechanical", "robotics"}},

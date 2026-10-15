@@ -118,8 +118,8 @@ func llmNgramBlock() Block {
 					llmSource(),
 				),
 				h.Div(h.Class("flex flex-col gap-2"), panelLabel("Model"),
-					segs("Order", [2]string{"1", "Unigram"}, [2]string{"2", "Bigram"}, [2]string{"3", "Trigram"}, [2]string{"5", "5-gram"}),
-					field("k", "Smoothing k", "", 0.1, 0.01, 2, 0.01),
+					segs("Order", [2]string{"1", "n = 1"}, [2]string{"2", "n = 2"}, [2]string{"3", "n = 3"}, [2]string{"5", "n = 5"}),
+					field("k", "Smoothing k", "", 0.01, 0.001, 1, 0.001),
 					field("temp", "Temperature", "", 1, 0.1, 3, 0.05),
 				),
 				llmButton("sample", "Sample 200 chars", hugeicons.DiceIcon()),
@@ -135,7 +135,7 @@ func llmEmbeddingsBlock() Block {
 	return Block{
 		Slug:        "embeddings",
 		Title:       "Word embeddings",
-		Description: "Words that appear in similar contexts get similar vectors. Here: co-occurrence counts in a small made-up corpus, reweighted by positive PMI, then compressed by a truncated SVD (power iteration). Click a word to list its nearest neighbours by cosine similarity.",
+		Description: "Words that appear in similar contexts get similar vectors. Here: co-occurrence counts in a small made-up corpus, reweighted by positive PMI, then compressed to a few dimensions by a truncated SVD. Click a coloured word to list its nearest neighbours by cosine similarity.",
 		Tags:        []string{"PPMI", "SVD", "cosine"},
 		Wide:        true,
 		Render: func() h.Node {
@@ -143,7 +143,7 @@ func llmEmbeddingsBlock() Block {
 				h.Div(h.Class("flex flex-col gap-2"),
 					h.Svg(h.Data("plot", ""), h.ViewBox("0 0 560 380"), h.Class("block w-full"), h.Role("img"), h.Aria("label", "Two-dimensional projection of the word vectors")),
 					h.P(h.Class("text-[11px] leading-relaxed text-muted-foreground"),
-						"Corpus: about fifty template sentences written for this block (animals, royalty, food, cities), with filler words removed. At this toy scale neighbours are informative but word analogies are noisy; real embeddings are trained on billions of words."),
+						"Corpus: about seventy short sentences written for this block (animals, royalty, food, cities), with filler words removed. At this toy scale neighbours are informative but word analogies are noisy; real embeddings are trained on billions of words."),
 				),
 				h.Div(h.Class("flex flex-col gap-2"), panelLabel("Space"),
 					field("dims", "Dimensions", "", 6, 2, 12, 1),
@@ -204,7 +204,7 @@ func llmPositionsBlock() Block {
 					h.Div(h.Class("flex flex-col gap-1"), panelLabel("PE(p) · PE(q)"),
 						h.Canvas(h.Data("dot", ""), h.Class("aspect-square w-full rounded-md border"), h.Role("img"), h.Aria("label", "Dot products between positions"))),
 					h.Div(h.Class("font-mono text-[11px] leading-relaxed text-muted-foreground sm:col-span-2"),
-						"PE(pos, 2i) = sin(pos / 10000^(2i/d)) · PE(pos, 2i+1) = cos(pos / 10000^(2i/d))"),
+						"PE(pos, 2i) = sin(pos / 10000^(2i/d)) · PE(pos, 2i+1) = cos(pos / 10000^(2i/d)). Rows are positions, columns dimensions; pink is positive, blue negative. Right: dot products divided by d/2."),
 				),
 				h.Div(h.Class("flex flex-col gap-2"), panelLabel("Encoding"),
 					field("d", "d_model", "", 64, 8, 256, 8),
@@ -224,7 +224,7 @@ func llmTinyModelBlock() Block {
 	return Block{
 		Slug:        "tiny-model",
 		Title:       "Train a tiny language model",
-		Description: "A character-level neural language model trained in your browser by backpropagation and Adam: three previous characters are embedded, passed through a tanh layer, and a softmax predicts the next one (the architecture of Bengio et al. 2003, at toy size). It is not a transformer, but it learns the same objective: next-token cross-entropy.",
+		Description: "A character-level neural language model trained in your browser by backpropagation and Adam: three previous characters are embedded, passed through a tanh layer, and a softmax predicts the next one (the architecture of Bengio et al. 2003, at toy size). It is not a transformer, but it learns the same objective: next-token cross-entropy. On a text this short it memorises quickly; weight decay (decoupled, as in AdamW) holds the validation loss down. Set it to 0 to watch it overfit.",
 		Tags:        []string{"backprop", "Adam", "cross-entropy"},
 		Wide:        true,
 		Render: func() h.Node {
@@ -239,8 +239,9 @@ func llmTinyModelBlock() Block {
 					llmSource(),
 				),
 				h.Div(h.Class("flex flex-col gap-2"), panelLabel("Model"),
-					field("hidden", "Hidden units", "", 64, 8, 128, 8),
-					field("lr", "Learning rate", "", 0.01, 0.001, 0.05, 0.001),
+					field("hidden", "Hidden units", "", 32, 8, 128, 8),
+					field("lr", "Learning rate", "", 0.003, 0.001, 0.05, 0.001),
+					field("wd", "Weight decay", "", 0.1, 0, 1, 0.01),
 					field("temp", "Temperature", "", 0.8, 0.1, 2, 0.05),
 				),
 				h.Div(h.Class("grid grid-cols-2 gap-2"),
@@ -387,7 +388,7 @@ func llmEvaluationBlock() Block {
 	return Block{
 		Slug:        "evaluation",
 		Title:       "Confident errors and evaluation",
-		Description: "Why a fluent model can be wrong with confidence, and how models are measured. The demo asks the n-gram model trained above for its most likely continuation: it is always fluent-looking, never checked against the world.",
+		Description: "Why a fluent model can be wrong with confidence, and how models are measured. The demo asks a character trigram model, trained on the same Alice text, for its most likely continuation: it always produces an answer, and nothing in it is checked against the world.",
 		Tags:        []string{"hallucination", "perplexity", "benchmarks"},
 		Render: func() h.Node {
 			return h.Div(h.Class("flex flex-col gap-4"), h.Data("llm-eval", ""),
