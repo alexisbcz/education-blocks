@@ -225,7 +225,8 @@ function c4Negamax(g, p, depth, alpha, beta, ply, st) {
 
 // Iterative deepening under a time budget; returns the best move of the
 // deepest search that finished.
-function c4Think(g, p, budget) {
+function c4Think(board, p, budget) {
+  const g = board.map((r) => r.slice()); // a timeout leaves the copy half-searched
   const st = { nodes: 0, deadline: performance.now() + budget };
   const t0 = performance.now();
   let move = ORDER.find((c) => !g[0][c]), value = 0, depth = 0;
@@ -501,7 +502,11 @@ for (const root of document.querySelectorAll("[data-game-collide]")) {
       if (overlap < 0) { sep = ax; gap = -overlap; break; }
       if (overlap < minOverlap) { minOverlap = overlap; mtv = ax; }
     }
-    return sep ? { hit: false, axis: sep, gap, tests } : { hit: true, axis: mtv, depth: minOverlap, tests };
+    if (sep) return { hit: false, axis: sep, gap, tests };
+    // Point the push from A toward B.
+    const c = (P) => P.reduce((m, p) => [m[0] + p[0] / P.length, m[1] + p[1] / P.length], [0, 0]);
+    if (dot(sub(c(B), c(A)), mtv) < 0) mtv = [-mtv[0], -mtv[1]];
+    return { hit: true, axis: mtv, depth: minOverlap, tests };
   }
 
   function shapes() {

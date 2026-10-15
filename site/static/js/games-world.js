@@ -661,7 +661,7 @@ for (const root of document.querySelectorAll("[data-game-npc]")) {
 
   // Runs whenever on screen, except under reduced motion, where it runs
   // only while the pointer steers the player.
-  let lastMove = 0;
+  let lastMove = -Infinity;
   const kick = loop(root, (dt) => { update(dt); draw(); if (target) lastMove = performance.now(); }, () => !reduced() || performance.now() - lastMove < 4000 || !!target);
   new ResizeObserver(draw).observe(canvas);
   onTheme(() => { pal = palette(); draw(); });
