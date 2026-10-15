@@ -85,7 +85,7 @@ func main() {
 		// The module loader's list of paths.
 		return strings.ReplaceAll(html, `"/static/js/`, `"`+*base+`static/js/`)
 	}
-	pages := []string{"/subjects"}
+	pages := []string{"/", "/subjects"}
 	for _, c := range site.Collections() {
 		pages = append(pages, c.Path)
 	}

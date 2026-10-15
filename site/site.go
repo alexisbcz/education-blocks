@@ -39,7 +39,7 @@ type Collection struct {
 // Collections lists the subjects, in header order.
 func Collections() []Collection {
 	return []Collection{
-		{Slug: "linalg", Name: "Linear Algebra", Path: "/",
+		{Slug: "linalg", Name: "Linear Algebra", Path: "/linalg",
 			Title:  "The blocks of an interactive linear algebra course",
 			Lede:   "Every block is a Go function rendered on the server with libhtml and the shadcn/ui components for Go. A few kilobytes of vanilla JavaScript make the interactive ones move. No Node.js, no bundler.",
 			Blocks: Blocks},
@@ -351,6 +351,10 @@ func Handler() http.Handler {
 	mux := http.NewServeMux()
 	mux.Handle("GET /static/", http.StripPrefix("/static/", http.FileServerFS(assets)))
 	mux.Handle(runtime.Prefix, runtime.Handler())
+	// The catalog is the home page; /subjects stays as an alias.
+	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
+		_ = h.WriteHTTP(w, http.StatusOK, catalog(r))
+	})
 	mux.HandleFunc("GET /subjects", func(w http.ResponseWriter, r *http.Request) {
 		_ = h.WriteHTTP(w, http.StatusOK, catalog(r))
 	})

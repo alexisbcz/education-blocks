@@ -251,7 +251,7 @@ func platDashboard() h.Node {
 					h.Span(h.Class("text-sm text-muted-foreground"), "Linear Algebra · lesson 3.2 · 18 min · +120 XP"),
 				),
 				h.P(h.Class("text-xs leading-relaxed text-muted-foreground"), "Picked because you finished 3.1 yesterday and its reviews are fresh."),
-				button.Button(button.VariantOutline, button.SizeSm, h.Class("mt-auto"), lib.AsChild, h.A(h.Href("/#lesson-header"), hugeicons.PlayIcon(), "Continue")),
+				button.Button(button.VariantOutline, button.SizeSm, h.Class("mt-auto"), lib.AsChild, h.A(h.Href("/linalg#lesson-header"), hugeicons.PlayIcon(), "Continue")),
 			),
 		),
 	)
