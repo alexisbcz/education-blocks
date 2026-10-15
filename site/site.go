@@ -491,6 +491,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive combinatorics course",
 			Lede:   "Counting by matching things up, with every count exact: stars and bars, Catalan numbers drawn four ways in sync, partitions and Young diagrams with Euler's pentagonal recurrence, Glaisher's bijection between distinct and odd parts, derangements and 1/e, set partitions with Stirling and Bell numbers, making change with generating functions, domino tilings and their recurrences, Ramsey's R(3, 3) = 6, and the ballot problem by reflection.",
 			Blocks: CombinatoricsBlocks},
+		{Slug: "marine", Name: "Naval Architecture", Path: "/marine",
+			Title:  "The blocks of an interactive naval architecture course",
+			Lede:   "Why ships float upright and how fast they go, starting from an inclining experiment on a model pontoon: draft and displacement, the righting lever and GZ curve computed exactly for a box, the free-surface effect of slack tanks, working up a real inclining test, hull speed and the Froude number, friction and residuary resistance with effective power, the propeller's open-water diagram, apparent wind and sail forces, and a polar diagram with VMG and laylines.",
+			Blocks: MarineBlocks},
 	}
 }
 
