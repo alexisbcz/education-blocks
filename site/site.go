@@ -231,6 +231,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive operating systems course",
 			Lede:   "What the kernel does between your program and the hardware: six CPU schedulers on one workload, the five process states, address translation through a TLB, page replacement with Belady's anomaly, a race condition you interleave by hand, the banker's algorithm, dining philosophers, inode pointers, disk scheduling, heap fragmentation and a read() traced across the user/kernel boundary.",
 			Blocks: OsBlocks},
+		{Slug: "nuclear", Name: "Nuclear & Particle Physics", Path: "/nuclear",
+			Title:  "The blocks of an interactive nuclear and particle physics course",
+			Lede:   "Inside the nucleus and beyond: a chart of nuclides with their decay modes, the binding-energy curve from the semi-empirical mass formula, mass defects and Q-values from real atomic masses, decay one atom at a time and in Bateman chains, fission and criticality, fusion against the Coulomb barrier, shielding, dose in gray and sievert, and the Standard Model with a hadron builder.",
+			Blocks: NuclearBlocks},
 	}
 }
 
