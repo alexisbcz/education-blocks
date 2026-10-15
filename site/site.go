@@ -531,6 +531,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive spectroscopy course",
 			Lede:   "How chemists read what a molecule is from the light and ions it gives back, computed in the page: rings and π bonds from the formula, isotope clusters in a mass spectrum, fragment losses, NMR splitting trees, assigning a ¹H spectrum, functional groups from IR bands, UV-Vis calibration and stray light, chromatographic resolution and the van Deemter curve, detection limits and standard addition, and powder X-ray diffraction.",
 			Blocks: SpectroBlocks},
+		{Slug: "calendars", Name: "Calendars & Timekeeping", Path: "/calendars",
+			Title:  "The blocks of an interactive calendars and timekeeping course",
+			Lede:   "How people count days and keep time, with every calendar algorithm in exact integer arithmetic: leap-year rules and the Gregorian reform, the weekday by Zeller and by Doomsday, Julian Day Numbers, the Easter computus, the Metonic cycle, the lunar Islamic calendar, ISO week numbers, sundial hour lines, the pendulum clock, and Unix time with leap seconds and the 2038 overflow.",
+			Blocks: CalendarsBlocks},
 	}
 }
 
