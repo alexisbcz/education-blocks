@@ -28,7 +28,28 @@ type Block struct {
 	Wide bool
 }
 
-// Blocks lists the gallery in display order.
+// Collection is one subject's set of blocks, served at its own path.
+type Collection struct {
+	Slug, Name, Path string
+	Title, Lede      string
+	Blocks           func() []Block
+}
+
+// Collections lists the subjects, in header order.
+func Collections() []Collection {
+	return []Collection{
+		{Slug: "linalg", Name: "Linear Algebra", Path: "/",
+			Title:  "The blocks of an interactive linear algebra course",
+			Lede:   "Every block is a Go function rendered on the server with libhtml and the shadcn/ui components for Go. A few kilobytes of vanilla JavaScript make the interactive ones move. No Node.js, no bundler.",
+			Blocks: Blocks},
+		{Slug: "neuro", Name: "Neuroscience", Path: "/neuro",
+			Title:  "The blocks of an interactive neuroscience course",
+			Lede:   "Science taught with live models, not pictures of them: the action potential is the Hodgkin–Huxley equations integrated in your browser, membrane potentials come from Nernst and Goldman, spike trains from a Poisson process.",
+			Blocks: NeuroBlocks},
+	}
+}
+
+// Blocks lists the linear algebra gallery in display order.
 func Blocks() []Block {
 	return []Block{
 		courseShellBlock(),
@@ -57,15 +78,25 @@ func Handler() http.Handler {
 	mux := http.NewServeMux()
 	mux.Handle("GET /static/", http.StripPrefix("/static/", http.FileServerFS(assets)))
 	mux.Handle(runtime.Prefix, runtime.Handler())
-	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
-		_ = h.WriteHTTP(w, http.StatusOK, gallery(r))
-	})
+	for _, c := range Collections() {
+		mux.HandleFunc("GET "+c.Path+h.Ternary(c.Path == "/", "{$}", ""), func(w http.ResponseWriter, r *http.Request) {
+			_ = h.WriteHTTP(w, http.StatusOK, gallery(r, c))
+		})
+	}
 	return secure.Headers(secure.Config{})(mux)
 }
 
-// RenderGallery renders the gallery outside a request, for the stylesheet
-// generator.
+// RenderGallery renders every collection outside a request, for the
+// stylesheet generator.
 func RenderGallery() (string, error) {
-	r, _ := http.NewRequest("GET", "/", nil)
-	return h.RenderString(gallery(r))
+	out := ""
+	for _, c := range Collections() {
+		r, _ := http.NewRequest("GET", c.Path, nil)
+		s, err := h.RenderString(gallery(r, c))
+		if err != nil {
+			return "", err
+		}
+		out += s
+	}
+	return out, nil
 }

@@ -11,3 +11,4 @@ import "./elimination.js";
 import "./exercises.js";
 import "./anatomy-loader.js";
 import "./shell.js";
+import "./neuro.js";

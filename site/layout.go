@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/alexisbcz/components/lib"
 	"github.com/alexisbcz/components/ui/badge"
 	"github.com/alexisbcz/components/ui/button"
 	"github.com/alexisbcz/components/ui/runtime"
@@ -22,13 +21,13 @@ const themeScript = `(() => {
   if (saved === "dark" || (!saved && matchMedia("(prefers-color-scheme: dark)").matches)) root.classList.add("dark");
 })();`
 
-func gallery(r *http.Request) h.Node {
-	blocks := Blocks()
+func gallery(r *http.Request, c Collection) h.Node {
+	blocks := c.Blocks()
 	return h.Doctype(h.Html(h.Lang("en"),
 		h.Head(
 			h.Meta(h.Charset("utf-8")),
 			h.Meta(h.Name("viewport"), h.Content("width=device-width, initial-scale=1")),
-			h.Title("Blocks · Linear Algebra"),
+			h.Title("Blocks · "+c.Name),
 			h.Meta(h.Name("description"), h.Content("The building blocks of an interactive linear algebra course: matrices, code, transformations, proofs and exercises.")),
 			h.Link(h.Rel("preload"), h.Href("/static/fonts/Geist-Variable.woff2"), h.Attr("as", "font"), h.Type("font/woff2"), h.Attr("crossorigin", "")),
 			h.Link(h.Rel("preload"), h.Href("/static/fonts/GeistMono-Variable.woff2"), h.Attr("as", "font"), h.Type("font/woff2"), h.Attr("crossorigin", "")),
@@ -39,11 +38,11 @@ func gallery(r *http.Request) h.Node {
 			secure.Script(r, h.Type("module"), h.Src("/static/js/app.js")),
 		),
 		h.Body(h.Class("min-h-svh bg-background font-sans text-foreground antialiased"),
-			siteHeader(len(blocks)),
+			siteHeader(c, len(blocks)),
 			h.Div(h.Class("mx-auto flex w-full max-w-[1400px] gap-10 px-4 sm:px-6 lg:px-8"),
 				sideNav(blocks),
 				h.Main(h.Class("flex min-w-0 flex-1 flex-col gap-20 py-10 lg:py-14"),
-					intro(),
+					intro(c),
 					h.MapIdx(blocks, func(i int, b Block) h.Node { return blockSection(i, b) }),
 					siteFooter(),
 				),
@@ -52,7 +51,7 @@ func gallery(r *http.Request) h.Node {
 	))
 }
 
-func siteHeader(n int) h.Node {
+func siteHeader(c Collection, n int) h.Node {
 	return h.Header(h.Class("sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/70"),
 		h.Div(h.Class("mx-auto flex h-14 w-full max-w-[1400px] items-center gap-3 px-4 sm:px-6 lg:px-8"),
 			h.A(h.Href("/"), h.Class("flex items-center gap-2.5 font-medium tracking-tight"),
@@ -60,11 +59,16 @@ func siteHeader(n int) h.Node {
 				h.Span("Hypercode"),
 			),
 			h.Span(h.Class("text-border select-none"), "/"),
-			h.Span(h.Class("text-sm text-muted-foreground"), "Linear Algebra"),
-			badge.Badge(badge.VariantOutline, h.Class("ml-1 hidden font-mono text-[11px] sm:inline-flex"), fmt.Sprintf("%d blocks", n)),
+			// Subject switcher: a segmented control of links.
+			h.Nav(h.Aria("label", "Subjects"), h.Class("flex items-center gap-1 rounded-lg border p-0.5"),
+				h.Map(Collections(), func(o Collection) h.Node {
+					return h.A(h.Href(o.Path), h.If(o.Slug == c.Slug, h.Aria("current", "page")),
+						h.Class("rounded-md px-2.5 py-1 text-xs text-muted-foreground transition-colors duration-150 hover:text-foreground aria-[current=page]:bg-accent aria-[current=page]:text-foreground"),
+						o.Name)
+				}),
+			),
+			badge.Badge(badge.VariantOutline, h.Class("ml-1 hidden font-mono text-[11px] md:inline-flex"), fmt.Sprintf("%d blocks", n)),
 			h.Div(h.Class("flex-1")),
-			button.Button(button.VariantOutline, button.SizeSm, h.Class("hidden sm:inline-flex"), lib.AsChild,
-				h.A(h.Href("#editor"), hugeicons.SourceCodeIcon(), "Editor")),
 			button.Button(button.VariantOutline, button.SizeIcon, h.Class("size-8"), h.Type("button"),
 				h.Data("theme-toggle", ""), h.Aria("label", "Toggle theme"),
 				hugeicons.Sun03Icon(h.Class("hidden dark:block")),
@@ -100,14 +104,11 @@ func sideNav(blocks []Block) h.Node {
 	)
 }
 
-func intro() h.Node {
+func intro(c Collection) h.Node {
 	return h.Section(h.Class("flex max-w-2xl flex-col gap-4"),
-		h.P(h.Class("font-mono text-xs tracking-wider text-muted-foreground uppercase"), "Platform rework · v0"),
-		h.H1(h.Class("text-3xl font-semibold tracking-tight text-balance sm:text-4xl"),
-			"The blocks of an interactive linear algebra course"),
-		h.P(h.Class("text-base leading-relaxed text-pretty text-muted-foreground"),
-			"Every block is a Go function rendered on the server with libhtml and the shadcn/ui components for Go. ",
-			"A few kilobytes of vanilla JavaScript make the interactive ones move. No Node.js, no bundler."),
+		h.P(h.Class("font-mono text-xs tracking-wider text-muted-foreground uppercase"), "Platform rework · "+c.Name),
+		h.H1(h.Class("text-3xl font-semibold tracking-tight text-balance sm:text-4xl"), c.Title),
+		h.P(h.Class("text-base leading-relaxed text-pretty text-muted-foreground"), c.Lede),
 		h.Div(h.Class("flex flex-wrap gap-2 pt-1"),
 			h.Map([]string{"Server-rendered", "Strict CSP", "Hugeicons", "Geist", "Reduced motion"}, func(s string) h.Node {
 				return badge.Badge(badge.VariantOutline, h.Class("font-normal text-muted-foreground"), s)

@@ -65,3 +65,17 @@ export function scrubbable(input, { min = -5, max = 5, step = 0.1, onChange }) {
 
   return { get: () => value, set };
 }
+
+/** Makes every [data-scrub] input under root scrubbable, reading its range
+ *  from data-min, data-max and data-step. Returns them by name. */
+export function scrubAll(root, onChange) {
+  const out = {};
+  for (const input of root.querySelectorAll("[data-scrub]")) {
+    const d = input.dataset;
+    out[d.scrub] = scrubbable(input, {
+      min: Number(d.min ?? -5), max: Number(d.max ?? 5), step: Number(d.step ?? 0.1),
+      onChange: () => onChange?.(d.scrub),
+    });
+  }
+  return out;
+}

@@ -43,9 +43,12 @@ document.addEventListener("click", (e) => {
   const seg = e.target.closest("[data-seg]");
   if (!seg) return;
   const tablist = seg.closest("[role=tablist]");
-  const scope = tablist?.parentElement?.closest(":has([data-view])");
-  if (!scope) return;
+  if (!tablist) return;
   for (const b of tablist.querySelectorAll("[data-seg]")) b.setAttribute("aria-selected", String(b === seg));
+  tablist.dispatchEvent(new CustomEvent("seg-change", { bubbles: true, detail: { value: seg.dataset.seg } }));
+  // Panels switch within the block the control belongs to.
+  const scope = tablist.closest("[data-block]");
+  if (!scope) return;
   for (const v of scope.querySelectorAll(":scope [data-view]")) {
     if (v.closest("[role=tablist]")) continue;
     v.hidden = v.dataset.view !== seg.dataset.seg;
