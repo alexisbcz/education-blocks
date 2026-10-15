@@ -195,6 +195,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive language learning course",
 			Lede:   "Tools for learning French that you would use every week: an SM-2 spaced-repetition deck, eighteen verbs in six tenses, gender drills with the exceptions that matter, a La Fontaine cloze, accents and French spacing, minimal pairs, word-frequency coverage on any text, interlinear glossing, numbers in twenties, and a CEFR study plan.",
 			Blocks: LanguagesBlocks},
+		{Slug: "signals", Name: "Signal Processing", Path: "/signals",
+			Title:  "The blocks of an interactive signal processing course",
+			Lede:   "Signals you can sample, transform and filter: aliasing you can hear, a DFT with windows and leakage, Fourier series and the Gibbs overshoot, convolution as flip-and-slide, FIR and biquad filters with their responses, a z-plane you drag, a spectrogram's time–frequency trade-off, quantization noise, and 2D image kernels.",
+			Blocks: SignalsBlocks},
 	}
 }
 
