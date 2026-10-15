@@ -255,6 +255,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive civil engineering course",
 			Lede:   "How structures carry load, starting from a model truss bridge on a test bench with its bars tinted by force: the method of joints as a linear system, shear and moment diagrams with the elastic curve, cross-sections and bending stress, Euler buckling, catenary arches, a reinforced concrete beam, load paths with Eurocode factors, footbridge resonance and a gravity dam.",
 			Blocks: CivilBlocks},
+		{Slug: "optics", Name: "Optics & Photography", Path: "/optics",
+			Title:  "The blocks of an interactive optics and photography course",
+			Lede:   "Light, lenses and the camera, from a mirrorless camera cut open on a tripod: the exposure triangle in stops, depth of field from the thin-lens model, ray diagrams for lenses and mirrors, telescopes and microscopes, the Airy disk against pixel pitch, angle of view and crop factor, additive and subtractive color, Malus's law and dispersion in a prism.",
+			Blocks: OpticsBlocks},
 	}
 }
 
