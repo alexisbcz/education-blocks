@@ -464,7 +464,7 @@ for (const root of document.querySelectorAll("[data-toc-chomsky]")) {
     if (marker) {
       const [x, y, w, hh] = rects[marker.lvl];
       const cx = x + w - 24, cy = y + hh - 18;
-      s("circle", { cx, cy, r: 6, style: `fill:${marker.ok ? "var(--code-add)" : "var(--code-del)"}` }, svg);
+      s("circle", { cx, cy, r: 6, style: `fill:${marker.ok ? "var(--brand)" : "var(--code-del)"}` }, svg);
     }
   }
   function pick(id) {

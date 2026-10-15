@@ -199,7 +199,9 @@
   --color-code: var(--code-bg);
   --color-code-panel: var(--code-panel);
   --color-code-foreground: var(--code-fg);
-  --color-add: var(--code-add);
+  /* Success, correct and "ok" states use the brand pink; diffs keep green. */
+  --color-add: var(--brand);
+  --color-diff-add: var(--code-add);
   --color-del: var(--code-del);
   --color-mod: var(--code-mod);
   --color-vec-i: var(--vec-i);

@@ -344,7 +344,7 @@ for (const root of document.querySelectorAll("[data-spc-link]")) {
     bars.forEach((b, k) => {
       const y = f.T + (k / rows.length) * f.H + 3, hgt = f.H / rows.length - 6;
       const x0 = f.sx(Math.min(b.from, b.to)), x1 = f.sx(Math.max(b.from, b.to));
-      const color = b.total ? (b.name === "= margin" ? (b.to >= 3 ? BRAND : "var(--code-del)") : "var(--muted-foreground)") : b.dv >= 0 ? "var(--code-add)" : "var(--code-del)";
+      const color = b.total ? (b.name === "= margin" ? (b.to >= 3 ? BRAND : "var(--code-del)") : "var(--muted-foreground)") : b.dv >= 0 ? "var(--brand)" : "var(--code-del)";
       el("rect", { x: x0, y, width: Math.max(1, x1 - x0), height: hgt, rx: 2, style: `fill:${color};fill-opacity:${b.total ? 0.55 : 0.75}` }, chart);
       text(chart, 144, y + hgt / 2 + 3, b.name, { "text-anchor": "end", class: b.total ? "fill-foreground font-mono text-[10px]" : "fill-muted-foreground font-mono text-[10px]" });
       const val = b.total ? b.to : b.dv;

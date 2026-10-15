@@ -256,7 +256,7 @@ for (const root of document.querySelectorAll("[data-fin-ledger]")) {
     o.equation.textContent = `Assets ${int.format(A)} = Liabilities ${int.format(L)} + Equity ${int.format(E)} + (Revenue ${int.format(R)} − Expenses ${int.format(X)})`;
     const ok = tdr === tcr && A === L + E + R - X;
     o.check.textContent = ok ? `Debits equal credits (${int.format(tdr)}), and the equation holds.` : "Out of balance.";
-    o.check.className = ok ? "text-sm text-[var(--code-add)]" : "text-sm text-[var(--code-del)]";
+    o.check.className = ok ? "text-sm text-add" : "text-sm text-[var(--code-del)]";
     root.querySelector("[data-action=next]").disabled = posted === TXS.length;
     root.querySelector("[data-action=all]").disabled = posted === TXS.length;
   }
@@ -308,7 +308,7 @@ for (const root of document.querySelectorAll("[data-fin-statements]")) {
     o.check.textContent = ok
       ? `Assets ${k(ta)} = liabilities + equity ${k(tle)}. Cash from the cash-flow statement (20 + ${k(dcash)}) is the balance-sheet cash.` + (bs.cash < 0 ? " Cash is negative: the business would need more financing." : "")
       : "The balance sheet does not balance.";
-    o.check.className = "text-sm xl:col-span-3 " + (ok && bs.cash >= 0 ? "text-[var(--code-add)]" : "text-[var(--code-del)]");
+    o.check.className = "text-sm xl:col-span-3 " + (ok && bs.cash >= 0 ? "text-add" : "text-[var(--code-del)]");
   }
   draw();
 }
@@ -349,7 +349,7 @@ for (const root of document.querySelectorAll("[data-fin-breakeven]")) {
     o.be.textContent = Number.isFinite(be) ? `${int.format(Math.ceil(be))} units` : "never (price ≤ variable cost)";
     o.bes.textContent = Number.isFinite(be) ? money0(be * p) : "—";
     o.profit.textContent = money0(profit);
-    o.profit.className = "tabular-nums " + (profit >= 0 ? "text-[var(--code-add)]" : "text-[var(--code-del)]");
+    o.profit.className = "tabular-nums " + (profit >= 0 ? "text-add" : "text-[var(--code-del)]");
     o.mos.textContent = Number.isFinite(be) && q > 0 ? pct((q - be) / q, 1) : "—";
     o.dol.textContent = profit > 0 ? `${fmt((cm * q) / profit, 2)}×` : "— (no profit)";
   }
@@ -421,7 +421,7 @@ for (const root of document.querySelectorAll("[data-fin-npv]")) {
     let changes = 0, last = 0;
     for (const c of cf) if (c) { if (last && Math.sign(c) !== last) changes++; last = Math.sign(c); }
     o.npv.textContent = money(npv);
-    o.npv.className = "tabular-nums " + (npv >= 0 ? "text-[var(--code-add)]" : "text-[var(--code-del)]");
+    o.npv.className = "tabular-nums " + (npv >= 0 ? "text-add" : "text-[var(--code-del)]");
     o.irr.textContent = roots.length === 0 ? "none (NPV never crosses 0)" : roots.map((x) => pct(x, 2)).join(" and ");
     o.signs.textContent = String(changes) + (changes > 1 ? " · up to that many IRRs" : "");
     // Payback: when the running total of undiscounted cash first turns positive.

@@ -65,7 +65,7 @@ for (const root of document.querySelectorAll("[data-meth-dag]")) {
       if (b.blocked) continue;
       for (let i = 1; i < p.length; i++) {
         const [a, c] = p[i].arrowIn ? [p[i - 1].node, p[i].node] : [p[i].node, p[i - 1].node];
-        edgeStyle.set(a + c, back ? "var(--code-del)" : "var(--code-add)");
+        edgeStyle.set(a + c, back ? "var(--code-del)" : "var(--brand)");
       }
     }
     clear(svg);

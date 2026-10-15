@@ -476,7 +476,7 @@ for (const root of document.querySelectorAll("[data-topo-knots]")) {
       const r = ok(c, colour);
       if (r === true) good++;
       if (r === false) bad++;
-      if (r !== null) el("circle", { cx: c.xy[0], cy: -c.xy[1], r: 0.2, style: `fill:none;stroke:${r ? "var(--code-add)" : "var(--code-del)"};stroke-width:0.05` }, scene);
+      if (r !== null) el("circle", { cx: c.xy[0], cy: -c.xy[1], r: 0.2, style: `fill:none;stroke:${r ? "var(--brand)" : "var(--code-del)"};stroke-width:0.05` }, scene);
     }
     const used = new Set(colour.filter((c) => c >= 0)).size, done = colour.every((c) => c >= 0);
     o.cross.textContent = String(K.X.length);

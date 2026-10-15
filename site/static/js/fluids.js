@@ -514,7 +514,7 @@ for (const root of document.querySelectorAll("[data-fluid-potential]")) {
     const handles = p === "rankine" ? [["source", "+"], ["sink", "−"]] : p === "vortex" ? [["spot", "+"]] : [];
     for (const [key, sign] of handles) {
       const [hx, hy] = movers[key];
-      const c = el("circle", { cx: X(hx), cy: Y(hy), r: 9, tabindex: 0, role: "slider", "aria-label": `Move the ${key === "sink" ? "sink" : "source"}`, class: "cursor-grab outline-none", style: `fill:var(--background);stroke:${sign === "+" ? "var(--code-add)" : "var(--code-del)"};stroke-width:2` }, svg);
+      const c = el("circle", { cx: X(hx), cy: Y(hy), r: 9, tabindex: 0, role: "slider", "aria-label": `Move the ${key === "sink" ? "sink" : "source"}`, class: "cursor-grab outline-none", style: `fill:var(--background);stroke:${sign === "+" ? "var(--brand)" : "var(--code-del)"};stroke-width:2` }, svg);
       text(svg, X(hx), Y(hy) + 4, sign, { "text-anchor": "middle", class: "pointer-events-none fill-foreground font-mono text-[12px]" });
       c.addEventListener("pointerdown", (e) => { c.setPointerCapture(e.pointerId); dragging = key; });
       c.addEventListener("keydown", (e) => {

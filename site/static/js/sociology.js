@@ -579,7 +579,7 @@ for (const root of document.querySelectorAll("[data-sampling]")) {
     hline(svg, f, truth, "stroke:var(--foreground);stroke-width:1.5", `truth ${pct(truth)}`);
     draws.forEach((d, i) => {
       const hit = Math.abs(d.p - truth) <= d.moe;
-      const color = hit ? "var(--code-add)" : "var(--code-del)";
+      const color = hit ? "var(--brand)" : "var(--code-del)";
       const x = f.sx(i + 1);
       el("line", { x1: x, x2: x, y1: f.sy(Math.min(0.8, d.p + d.moe)), y2: f.sy(Math.max(0.2, d.p - d.moe)), style: `stroke:${color};stroke-width:2;stroke-linecap:round;stroke-opacity:0.7` }, svg);
       el("circle", { cx: x, cy: f.sy(d.p), r: 2.5, style: `fill:${color}` }, svg);

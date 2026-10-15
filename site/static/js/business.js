@@ -30,7 +30,7 @@ const euros = (v) => (Number.isFinite(v) ? minus(eur0.format(v)) : "—");
 const pct = (v, d = 1) => (Number.isFinite(v) ? `${num(v * 100, d)}%` : "—");
 const toCents = (v) => Math.round(v * 100);
 
-const good = "tabular-nums text-[var(--code-add)]";
+const good = "tabular-nums text-add";
 const bad = "tabular-nums text-[var(--code-del)]";
 function verdict(node, ok, yes, no) {
   node.textContent = ok ? yes : no;
@@ -349,7 +349,7 @@ for (const root of document.querySelectorAll("[data-biz-variance]")) {
     bar(0, base, budget, "var(--foreground)", "budget", short(budget / 100));
     steps.forEach((x, i) => {
       const fav = x.d >= 0;
-      bar(i + 1, x.a, x.b, fav ? "var(--code-add)" : "var(--code-del)", x.k, x.d === 0 ? "0" : `${fav ? "+" : ""}${short(x.d / 100)}`);
+      bar(i + 1, x.a, x.b, fav ? "var(--brand)" : "var(--code-del)", x.k, x.d === 0 ? "0" : `${fav ? "+" : ""}${short(x.d / 100)}`);
       const nx = f.L + (i + 2) * bw + bw * 0.16;
       el("line", { x1: f.L + (i + 1) * bw + bw * 0.84, x2: nx, y1: f.sy(x.b / 100), y2: f.sy(x.b / 100), style: "stroke:currentColor;stroke-opacity:0.3;stroke-dasharray:2 2" }, svg);
     });
@@ -410,7 +410,7 @@ for (const root of document.querySelectorAll("[data-biz-ccc]")) {
     o.dso.textContent = `${num(dso, 1)} days`;
     o.dpo.textContent = `${num(dpo, 1)} days`;
     o.ccc.textContent = `${num(ccc, 1)} days`;
-    o.ccc.className = "tabular-nums " + (ccc < 0 ? "text-[var(--code-add)]" : "");
+    o.ccc.className = "tabular-nums " + (ccc < 0 ? "text-add" : "");
     o.wc.textContent = `${int.format(inv + ar - ap)} k€`;
     o.ten.textContent = `frees ${num((rev / 365) * 10, 0)} k€`;
   }
@@ -618,7 +618,7 @@ for (const root of document.querySelectorAll("[data-biz-unit]")) {
     o.ltv.textContent = euros(ltv);
     const ratio = K > 0 ? ltv / K : Infinity;
     o.ratio.textContent = K > 0 ? `${num(ratio, 2)} : 1` : "∞ (free customers)";
-    o.ratio.className = "tabular-nums " + (ratio >= 3 ? "text-[var(--code-add)]" : ratio < 1 ? "text-[var(--code-del)]" : "");
+    o.ratio.className = "tabular-nums " + (ratio >= 3 ? "text-add" : ratio < 1 ? "text-[var(--code-del)]" : "");
     o.payback.textContent = G > 0 ? `${num(K / G, 1)} months` : "never";
     verdict(o.epayback, Number.isFinite(pay), `month ${pay}`, "never: LTV is below CAC");
     if (Number.isFinite(pay)) o.epayback.className = "tabular-nums";

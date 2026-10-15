@@ -558,7 +558,7 @@ for (const root of document.querySelectorAll("[data-argu-bayes]")) {
     const ys = 40;
     steps.forEach((st, i) => {
       const a = x(cur), b = x(cur + st);
-      const c = st >= 0 ? "var(--code-add)" : "var(--code-del)";
+      const c = st >= 0 ? "var(--brand)" : "var(--code-del)";
       const yy = ys - (i % 3) * 7;
       svgEl("line", { x1: a, x2: b, y1: yy, y2: yy, style: `stroke:${c};stroke-width:2;stroke-linecap:round` }, svg);
       if (Math.abs(b - a) > 6) svgEl("path", { d: `M${b - Math.sign(b - a) * 6} ${yy - 4} L${b} ${yy} L${b - Math.sign(b - a) * 6} ${yy + 4}`, style: `fill:none;stroke:${c};stroke-width:2` }, svg);

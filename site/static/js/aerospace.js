@@ -327,7 +327,7 @@ for (const root of document.querySelectorAll("[data-aero-vn]")) {
     // The point.
     const v = s.v.get(), n = s.n.get();
     const state = v > vd ? "beyond VD" : n > nStall(v) + 1e-9 || n < nStallNeg(v) - 1e-9 ? "stalls first" : n > nmax || n < nmin ? "structural overload" : "inside the envelope";
-    const color = state === "inside the envelope" ? "var(--code-add)" : "var(--code-del)";
+    const color = state === "inside the envelope" ? "var(--brand)" : "var(--code-del)";
     el("circle", { cx: f.sx(v), cy: f.sy(n), r: 5, style: `fill:${color};stroke:var(--background);stroke-width:2` }, svg);
     o.vs.textContent = `${num(vs, 1)} m/s`;
     o.va.textContent = `${num(va, 1)} m/s`;

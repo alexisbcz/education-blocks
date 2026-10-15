@@ -307,7 +307,7 @@ for (const root of document.querySelectorAll("[data-elec-bjt]")) {
     o.ic.textContent = fmtSI(ic, "A");
     o.vce.textContent = `${num(vce, 2)} V`;
     o.region.textContent = region;
-    o.region.style.color = region === "active" ? "var(--code-add)" : "var(--code-del)";
+    o.region.style.color = region === "active" ? "var(--brand)" : "var(--code-del)";
     o.gm.textContent = fmtSI(gm, "S");
     o.gain.textContent = Number.isFinite(gain) ? `${num(gain, 1)} (${num(20 * Math.log10(Math.abs(gain)), 1)} dB)` : "— (not in the active region)";
   }

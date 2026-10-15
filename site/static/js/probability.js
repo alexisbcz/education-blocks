@@ -234,7 +234,7 @@ for (const root of document.querySelectorAll("[data-prob-ruin]")) {
       // Thin long paths so the polyline stays light.
       const stepK = Math.max(1, Math.floor(w.length / 600));
       const pts = w.filter((_, k) => k % stepK === 0 || k === w.length - 1).map((y, k, arr) => [f.sx(k === arr.length - 1 ? w.length - 1 : k * stepK), f.sy(y)]);
-      polyline(svg, pts, `stroke:${lost ? "var(--code-del)" : "var(--code-add)"};stroke-opacity:0.55;stroke-width:1.1`);
+      polyline(svg, pts, `stroke:${lost ? "var(--code-del)" : "var(--brand)"};stroke-opacity:0.55;stroke-width:1.1`);
     }
     const ex = ruin(i, N, p);
     o.ruin.textContent = pct(ex.ruin, 1);

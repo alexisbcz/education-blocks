@@ -1038,8 +1038,8 @@ for (const root of document.querySelectorAll("[data-wx-cfl]")) {
     const cw = 26, sx0 = f.L + f.W - 3 * cw - 150, sy0 = f.T + 4;
     for (let i = 0; i < 3; i++) el("rect", { x: sx0 + i * cw, y: sy0, width: cw, height: 14, style: `fill:currentColor;fill-opacity:${i === 1 ? 0.1 : 0.04};stroke:currentColor;stroke-opacity:0.25` }, svg);
     const ax0 = sx0 + cw * 0.5, ax1 = ax0 + cw * C;
-    el("line", { x1: ax0, x2: ax1, y1: sy0 + 7, y2: sy0 + 7, style: `stroke:${C > 1 ? "var(--code-del)" : "var(--code-add)"};stroke-width:2.5` }, svg);
-    el("circle", { cx: ax1, cy: sy0 + 7, r: 3, style: `fill:${C > 1 ? "var(--code-del)" : "var(--code-add)"}` }, svg);
+    el("line", { x1: ax0, x2: ax1, y1: sy0 + 7, y2: sy0 + 7, style: `stroke:${C > 1 ? "var(--code-del)" : "var(--brand)"};stroke-width:2.5` }, svg);
+    el("circle", { cx: ax1, cy: sy0 + 7, r: 3, style: `fill:${C > 1 ? "var(--code-del)" : "var(--brand)"}` }, svg);
     text(svg, sx0 + 3 * cw + 8, sy0 + 11, `one step: ${num(C, 2)} cells`, { "text-anchor": "start" });
     const G = amplification(C, scheme);
     let err = 0;

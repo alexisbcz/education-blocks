@@ -328,7 +328,7 @@ func diffView() h.Node {
 			fileIcon(),
 			h.Span(h.Class("min-w-0 truncate"), "determinant.py"),
 			h.Span(h.Class("font-mono text-xs tabular-nums"),
-				h.Span(h.Class("text-add"), fmt.Sprintf("+%d", adds)), " ",
+				h.Span(h.Class("text-diff-add"), fmt.Sprintf("+%d", adds)), " ",
 				h.Span(h.Class("text-del"), fmt.Sprintf("−%d", dels))),
 			h.Div(h.Class("flex-1")),
 			h.Div(h.Class("flex items-center gap-1 rounded-lg border bg-background p-0.5"), h.Role("tablist"), h.Aria("label", "Layout"),
