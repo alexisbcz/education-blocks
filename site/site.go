@@ -199,6 +199,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive signal processing course",
 			Lede:   "Signals you can sample, transform and filter: aliasing you can hear, a DFT with windows and leakage, Fourier series and the Gibbs overshoot, convolution as flip-and-slide, FIR and biquad filters with their responses, a z-plane you drag, a spectrogram's time–frequency trade-off, quantization noise, and 2D image kernels.",
 			Blocks: SignalsBlocks},
+		{Slug: "graphics", Name: "Computer Graphics", Path: "/graphics",
+			Title:  "The blocks of an interactive computer graphics course",
+			Lede:   "How pictures are made from numbers: Bézier curves by de Casteljau's construction, triangles rasterized with edge functions, Bresenham's integer lines, the model–view–projection pipeline, a depth buffer against the painter's algorithm, Lambert and Phong shading, a small ray tracer, texture filtering and mipmaps, colour spaces from sRGB to OKLCH, and signed distance fields.",
+			Blocks: GraphicsBlocks},
 	}
 }
 
