@@ -379,6 +379,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive behavioral economics course",
 			Lede:   "How real people decide, set against the textbook: prospect theory's value and weighting curves, your own loss aversion from a price list, hyperbolic discounting and preference reversals, present bias in planning, defaults and inertia, the endowment effect in a mug market, ultimatum and dictator games, a public goods game with punishment, and the secretary problem. Each model is stated, each finding cited with its replication record.",
 			Blocks: BehavioralBlocks},
+		{Slug: "law", Name: "Law", Path: "/law",
+			Title:  "The blocks of an interactive law course",
+			Lede:   "How lawyers reason, taught with real cases and labelled by jurisdiction: IRAC and CREAC answers, the elements of negligence and contract formation, who binds whom under stare decisis, statutory interpretation on Hart's vehicles in the park, standards of proof, the Hand formula, limitation periods, drafting vocabulary, legal systems compared, and case citations in Bluebook and OSCOLA. Educational, not legal advice.",
+			Blocks: LawBlocks},
 	}
 }
 
