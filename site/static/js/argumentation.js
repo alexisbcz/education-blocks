@@ -424,7 +424,7 @@ for (const root of document.querySelectorAll("[data-argu-evidence]")) {
 
   function render() {
     rowsEl.replaceChildren(...items.map((it, i) => {
-      const r = mk("div", "grid grid-cols-[1fr_auto] items-center gap-2 rounded-lg border bg-background p-2 shadow-xs sm:grid-cols-[minmax(0,1fr)_auto_auto_auto_auto_auto]");
+      const r = mk("div", "grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center gap-2 rounded-lg border bg-background p-2 shadow-xs sm:grid-cols-[minmax(0,1fr)_auto_auto_auto_auto_auto]");
       const t = mk("input", INPUT + " col-span-2 sm:col-span-1");
       t.value = it.text;
       t.placeholder = "Describe the evidence";
@@ -433,6 +433,8 @@ for (const root of document.querySelectorAll("[data-argu-evidence]")) {
       const type = select(ETYPES.map(([k, txt]) => [k, txt]), it.type, "Kind of evidence");
       const rel = select([["low", "low relevance"], ["medium", "relevant"], ["high", "directly relevant"]], it.rel, "Relevance");
       const rec = select([["old", "dated"], ["recent", "recent"]], it.rec, "Recency");
+      // On phones the selects share two columns and must be allowed to shrink.
+      for (const s of [type, rel, rec]) s.classList.add("min-w-0", "w-full", "sm:w-auto");
       const indL = mk("label", "flex items-center gap-1.5 text-xs text-muted-foreground");
       const ind = mk("input", "size-4 accent-[var(--brand)]");
       ind.type = "checkbox";

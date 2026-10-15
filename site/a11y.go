@@ -193,7 +193,7 @@ func a11yReaderBlock() Block {
 						h.P(h.Class("text-muted-foreground"), "Matrices as transformations. ", h.A(h.Href("#screen-reader"), h.Class("underline"), "Read more"))),
 					h.Article(h.Class("flex flex-col gap-1"),
 						h.H4(h.Class("font-medium"), "Neuroscience"),
-						h.P(h.Class("text-muted-foreground"), "The action potential, live. ", h.A(h.Href("#tree"), h.Class("underline"), "Read more"))),
+						h.P(h.Class("text-muted-foreground"), "The action potential, live. ", h.A(h.Href("#accessibility-tree"), h.Class("underline"), "Read more"))),
 					h.Article(h.Class("flex flex-col gap-1"),
 						h.H4(h.Class("font-medium"), "Chemistry"),
 						h.P(h.Class("text-muted-foreground"), "Balance any equation. ", h.A(h.Href("#focus-order"), h.Class("underline"), "Read more"))),

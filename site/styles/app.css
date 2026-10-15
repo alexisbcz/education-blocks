@@ -227,6 +227,13 @@
     @apply bg-background text-foreground;
     font-feature-settings: "ss01" 0;
   }
+  /* A grid with no column template sizes its one column to its content's
+     min-content width, which on phones is wider than the preview card and
+     gets clipped. Default grids in previews to a column that can shrink;
+     any grid-cols-* utility (utilities layer) still wins. */
+  .preview .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
   ::selection {
     background: var(--code-selection);
   }
