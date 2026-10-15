@@ -291,6 +291,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive ecology and oceanography course",
 			Lede:   "Populations, communities and the sea, each from its model: Lotka–Volterra competition, a food web whose removals cascade, MacArthur–Wilson islands and the species–area law, Shannon and Simpson diversity, mark–recapture with Chapman's correction, the Drossel–Schwabl forest-fire automaton, seawater density from the UNESCO equation of state, spring and neap tides, and the carbonate system behind ocean acidification.",
 			Blocks: EcologyBlocks},
+		{Slug: "learning", Name: "Learning Science", Path: "/learning",
+			Title:  "The blocks of an interactive learning science course",
+			Lede:   "How to learn, with the evidence attached: a forgetting curve you flatten with spaced reviews, a spacing planner after Cepeda et al., free-recall practice, interleaved problem sets, why-and-how prompts, a confidence calibration quiz with its Brier score, a focus timer, a Feynman-style explanation workspace, a concept map, and what the research does and doesn't support.",
+			Blocks: LearningBlocks},
 	}
 }
 
