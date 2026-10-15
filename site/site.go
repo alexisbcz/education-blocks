@@ -499,6 +499,10 @@ func Collections() []Collection {
 			Title:  "The blocks of an interactive building physics course",
 			Lede:   "How buildings hold heat, move moisture, let in light and keep out noise: U-values, condensation, heat loss, thermal mass, sun and shade, daylight, ventilation, comfort and sound insulation, each worked with the standard design method.",
 			Blocks: BuildingBlocks},
+		{Slug: "netsci", Name: "Network Science", Path: "/netsci",
+			Title:  "The blocks of an interactive network science course",
+			Lede:   "How networks are built and how they break, on networks generated live from a seeded random number generator: the giant component of a random graph, preferential attachment and power laws, the friendship paradox, failure against attack on hubs, percolation on a lattice, community detection by modularity, epidemic thresholds and vaccination strategies, degree assortativity, triangles against a null model, and force-directed layout.",
+			Blocks: NetsciBlocks},
 	}
 }
 
